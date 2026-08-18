@@ -1,0 +1,1464 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IronPulse — Dashboard</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;600;700&display=swap"
+    rel="stylesheet" />
+  <style>
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg: #03070d;
+      --card: #080f1a;
+      --card2: #0a1525;
+      --card3: #0d1d35;
+      --cyan: #00fff7;
+      --cyan2: #00c8f0;
+      --blue: #004eff;
+      --green: #00ff88;
+      --orange: #ff8c00;
+      --text: #cce8f4;
+      --muted: #c9eeff;
+      --border: rgba(0, 255, 247, 0.1);
+      --borderH: rgba(0, 255, 247, 0.45);
+    }
+
+    html,
+    body {
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Rajdhani', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* BG */
+    .bg-grid {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background-image: linear-gradient(rgba(0, 255, 247, .028) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 255, 247, .028) 1px, transparent 1px);
+      background-size: 50px 50px;
+    }
+
+    .bg-glow {
+      position: fixed;
+      top: -20vh;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100vw;
+      height: 55vh;
+      background: radial-gradient(ellipse, rgba(0, 78, 255, .13) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* NAVBAR */
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(3, 7, 13, .92);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 1.3rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 58px;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      text-decoration: none;
+    }
+
+    .nav-ico {
+      width: 32px;
+      height: 32px;
+      border-radius: 9px;
+      background: linear-gradient(145deg, #00c8f0, #004eff);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 14px rgba(0, 200, 240, .4);
+    }
+
+    .nav-ico svg {
+      width: 17px;
+      height: 17px;
+      stroke: #fff;
+      fill: none;
+      stroke-width: 2.3;
+      stroke-linecap: round;
+    }
+
+    .nav-brand {
+      font-family: 'Orbitron', monospace;
+      font-size: .85rem;
+      font-weight: 900;
+      letter-spacing: 3px;
+      background: linear-gradient(90deg, var(--cyan), #fff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: .8rem;
+    }
+
+    .nav-date {
+      font-size: .68rem;
+      letter-spacing: 2px;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    .nav-av {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--blue), var(--cyan2));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Orbitron', monospace;
+      font-size: .75rem;
+      font-weight: 700;
+      color: #fff;
+      border: 2px solid var(--border);
+      cursor: pointer;
+      transition: all .2s;
+    }
+
+    .nav-av:hover {
+      border-color: var(--cyan);
+      box-shadow: 0 0 12px rgba(0, 255, 247, .2);
+    }
+
+    /* MAIN */
+    .main {
+      position: relative;
+      z-index: 1;
+      padding: 1.3rem 1.1rem 5.5rem;
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    /* WELCOME */
+    .welcome {
+      background: linear-gradient(135deg, rgba(0, 78, 255, .22), rgba(0, 200, 240, .06));
+      border: 1px solid rgba(0, 200, 240, .2);
+      border-radius: 20px;
+      padding: 1.4rem 1.5rem;
+      margin-bottom: 1.3rem;
+      position: relative;
+      overflow: hidden;
+      animation: fadeDown .6s cubic-bezier(.22, 1, .36, 1) both;
+    }
+
+    .welcome::before {
+      content: '';
+      position: absolute;
+      top: -50px;
+      right: -30px;
+      width: 180px;
+      height: 180px;
+      background: radial-gradient(circle, rgba(0, 200, 240, .12), transparent 70%);
+      pointer-events: none;
+    }
+
+    .w-tag {
+      font-size: .6rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--cyan2);
+      margin-bottom: .3rem;
+    }
+
+    .w-name {
+      font-family: 'Orbitron', monospace;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: .25rem;
+    }
+
+    .w-sub {
+      font-size: .84rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .w-badge {
+      position: absolute;
+      top: 1.1rem;
+      right: 1.2rem;
+      padding: 4px 11px;
+      border-radius: 20px;
+      font-size: .6rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    .wb-on {
+      background: rgba(0, 255, 136, .1);
+      border: 1px solid rgba(0, 255, 136, .3);
+      color: var(--green);
+    }
+
+    .wb-off {
+      background: rgba(255, 140, 0, .1);
+      border: 1px solid rgba(255, 140, 0, .3);
+      color: var(--orange);
+    }
+
+    /* SECTION LABEL */
+    .sec {
+      font-size: .63rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin: 1.45rem 0 .8rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+    }
+
+    .sec::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, var(--border), transparent);
+    }
+
+    /* STATS */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: .7rem;
+      animation: fadeUp .45s .1s ease both;
+    }
+
+    .stat {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: .95rem .7rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      transition: transform .25s, border-color .25s;
+    }
+
+    .stat:hover {
+      transform: translateY(-3px);
+      border-color: var(--borderH);
+    }
+
+    .stat::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(0, 255, 247, .03), transparent);
+    }
+
+    .stat-ico {
+      font-size: 1.15rem;
+      margin-bottom: .3rem;
+    }
+
+    .stat-val {
+      font-family: 'Orbitron', monospace;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 1px;
+    }
+
+    .stat-lbl {
+      font-size: .58rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* WORKOUT CARD */
+    .wk-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+      animation: fadeUp .45s .15s ease both;
+    }
+
+    .wk-head {
+      background: linear-gradient(135deg, rgba(0, 78, 255, .28), rgba(0, 200, 240, .07));
+      border-bottom: 1px solid var(--border);
+      padding: 1.05rem 1.35rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .wk-day {
+      font-size: .58rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--cyan2);
+      margin-bottom: 3px;
+    }
+
+    .wk-name {
+      font-family: 'Orbitron', monospace;
+      font-size: .92rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .wk-badge {
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: .58rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    .b-go {
+      background: rgba(0, 255, 136, .1);
+      border: 1px solid rgba(0, 255, 136, .3);
+      color: var(--green);
+    }
+
+    .b-rest {
+      background: rgba(255, 140, 0, .1);
+      border: 1px solid rgba(255, 140, 0, .3);
+      color: var(--orange);
+    }
+
+    .wk-body {
+      padding: 1.05rem 1.15rem;
+    }
+
+    .wk-footer {
+      padding: .8rem 1.15rem 1.1rem;
+      display: flex;
+      gap: .7rem;
+    }
+
+    /* REST BOX */
+    .rest-box {
+      text-align: center;
+      padding: 1.8rem 1rem;
+    }
+
+    .rest-box .ri {
+      font-size: 2.6rem;
+      margin-bottom: .65rem;
+    }
+
+    .rest-box .rt {
+      font-family: 'Orbitron', monospace;
+      font-size: .95rem;
+      font-weight: 700;
+      color: var(--orange);
+      margin-bottom: .35rem;
+    }
+
+    .rest-box .rd {
+      font-size: .85rem;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    /* EXERCISE LIST */
+    .ex-list {
+      display: flex;
+      flex-direction: column;
+      gap: .55rem;
+    }
+
+    .ex-item {
+      display: flex;
+      align-items: center;
+      gap: .85rem;
+      padding: .82rem .95rem;
+      background: var(--card2);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: all .22s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .ex-item::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: linear-gradient(180deg, var(--blue), var(--cyan));
+      opacity: 0;
+      transition: opacity .22s;
+      border-radius: 3px 0 0 3px;
+    }
+
+    .ex-item:hover {
+      border-color: var(--borderH);
+      background: var(--card3);
+      transform: translateX(5px);
+    }
+
+    .ex-item:hover::before {
+      opacity: 1;
+    }
+
+    .ex-num {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, var(--blue), var(--cyan2));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Orbitron', monospace;
+      font-size: .6rem;
+      font-weight: 700;
+      color: #fff;
+      flex-shrink: 0;
+      box-shadow: 0 0 8px rgba(0, 200, 240, .3);
+    }
+
+    .ex-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .ex-name {
+      font-size: .9rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .ex-detail {
+      font-size: .7rem;
+      color: var(--muted);
+    }
+
+    .ex-tag {
+      font-size: .58rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--cyan2);
+      background: rgba(0, 200, 240, .08);
+      padding: 3px 8px;
+      border-radius: 6px;
+      border: 1px solid rgba(0, 200, 240, .14);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .ex-arr {
+      color: var(--muted);
+      font-size: .85rem;
+      flex-shrink: 0;
+      transition: color .2s, transform .2s;
+    }
+
+    .ex-item:hover .ex-arr {
+      color: var(--cyan);
+      transform: translateX(2px);
+    }
+
+    /* WORKOUT BTNS */
+    .btn-wk {
+      flex: 1;
+      padding: 11px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-family: 'Orbitron', monospace;
+      font-size: .68rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      transition: all .22s;
+      border: none;
+    }
+
+    .btn-go {
+      background: linear-gradient(135deg, var(--blue), var(--cyan2));
+      color: #fff;
+      box-shadow: 0 0 18px rgba(0, 200, 240, .28);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-go::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255, 255, 255, .1), transparent);
+      pointer-events: none;
+    }
+
+    .btn-go:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 28px rgba(0, 200, 240, .5);
+    }
+
+    .btn-out {
+      background: transparent;
+      border: 1px solid var(--border) !important;
+      color: var(--muted);
+    }
+
+    .btn-out:hover {
+      border-color: var(--borderH) !important;
+      color: var(--text);
+    }
+
+    /* QUOTE */
+    .quote {
+      background: var(--card);
+      border: 1px solid rgba(0, 255, 136, .12);
+      border-radius: 18px;
+      padding: 1.3rem 1.4rem;
+      position: relative;
+      overflow: hidden;
+      animation: fadeUp .45s .2s ease both;
+    }
+
+    .quote::before {
+      content: '\201C';
+      position: absolute;
+      top: -15px;
+      left: 10px;
+      font-size: 7rem;
+      font-family: Georgia, serif;
+      color: rgba(0, 255, 136, .05);
+      line-height: 1;
+      pointer-events: none;
+    }
+
+    .q-text {
+      font-size: .96rem;
+      line-height: 1.7;
+      color: var(--text);
+      font-style: italic;
+      margin-bottom: .7rem;
+      position: relative;
+    }
+
+    .q-author {
+      font-size: .66rem;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--green);
+    }
+
+    /* WEEKLY PILLS */
+    .week-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: .4rem;
+      animation: fadeUp .45s .22s ease both;
+    }
+
+    .wp {
+      border-radius: 13px;
+      padding: .65rem .15rem .55rem;
+      text-align: center;
+      border: 1px solid var(--border);
+      background: var(--card);
+      transition: all .22s;
+      position: relative;
+    }
+
+    .wp.today {
+      border-color: var(--cyan);
+      background: linear-gradient(180deg, rgba(0, 255, 247, .09), rgba(0, 255, 247, .03));
+      box-shadow: 0 0 16px rgba(0, 255, 247, .12);
+    }
+
+    .wp.today::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 18px;
+      height: 2px;
+      background: var(--cyan);
+      border-radius: 2px;
+      box-shadow: 0 0 5px var(--cyan);
+    }
+
+    .wp.rest-wk {
+      border-color: rgba(255, 140, 0, .2);
+      background: rgba(255, 140, 0, .03);
+    }
+
+    .wp.done {
+      border-color: rgba(0, 255, 136, .2);
+      background: rgba(0, 255, 136, .03);
+    }
+
+    .wp-name {
+      font-size: .5rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .wp.today .wp-name {
+      color: var(--cyan);
+      font-weight: 700;
+    }
+
+    .wp.done .wp-name {
+      color: rgba(0, 255, 136, .5);
+    }
+
+    .wp-ico {
+      font-size: 1.2rem;
+      line-height: 1;
+    }
+
+    .wp-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--cyan);
+      margin: .3rem auto 0;
+      box-shadow: 0 0 5px var(--cyan);
+      display: none;
+    }
+
+    .wp.today .wp-dot {
+      display: block;
+    }
+
+    /* DIET */
+    .diet {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 1.15rem 1.35rem;
+      animation: fadeUp .45s .25s ease both;
+    }
+
+    .diet-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: .85rem;
+    }
+
+    .diet-name {
+      font-family: 'Orbitron', monospace;
+      font-size: .8rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 2px;
+    }
+
+    .diet-sub {
+      font-size: .73rem;
+      color: var(--muted);
+    }
+
+    .diet-link {
+      font-size: .63rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--cyan);
+      text-decoration: none;
+      opacity: .75;
+      transition: opacity .2s;
+    }
+
+    .diet-link:hover {
+      opacity: 1;
+    }
+
+    .macros {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: .7rem;
+    }
+
+    .macro {
+      text-align: center;
+      padding: .8rem .5rem;
+      background: var(--card2);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+
+    .macro-val {
+      font-family: 'Orbitron', monospace;
+      font-size: .95rem;
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+
+    .macro.p .macro-val {
+      color: var(--cyan2);
+    }
+
+    .macro.c .macro-val {
+      color: var(--orange);
+    }
+
+    .macro.f .macro-val {
+      color: #ff3860;
+    }
+
+    .macro-lbl {
+      font-size: .57rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* BOTTOM NAV */
+    .bnav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: rgba(6, 14, 24, .96);
+      backdrop-filter: blur(20px);
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      padding: .55rem 0 .7rem;
+    }
+
+    .bn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      text-decoration: none;
+      padding: .2rem .8rem;
+    }
+
+    .bn svg {
+      width: 21px;
+      height: 21px;
+      stroke: var(--muted);
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      transition: stroke .2s;
+    }
+
+    .bn span {
+      font-size: .57rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--muted);
+      transition: color .2s;
+    }
+
+    .bn.active svg {
+      stroke: var(--cyan);
+      filter: drop-shadow(0 0 4px rgba(0, 255, 247, .5));
+    }
+
+    .bn.active span {
+      color: var(--cyan);
+    }
+
+    /* ═══════ EXERCISE DIALOG ═══════ */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: rgba(0, 0, 0, .75);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .3s;
+    }
+
+    .overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .dialog {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 24px 24px 0 0;
+      width: 100%;
+      max-width: 680px;
+      max-height: 90vh;
+      overflow-y: auto;
+      transform: translateY(100%);
+      transition: transform .38s cubic-bezier(.22, 1, .36, 1);
+      position: relative;
+    }
+
+    .overlay.open .dialog {
+      transform: translateY(0);
+    }
+
+    .dlg-handle {
+      width: 38px;
+      height: 4px;
+      border-radius: 4px;
+      background: var(--borderH);
+      margin: 12px auto 0;
+    }
+
+    .dlg-close {
+      position: absolute;
+      top: .9rem;
+      right: 1.1rem;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: var(--card2);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: .9rem;
+      color: var(--muted);
+      transition: all .2s;
+      z-index: 10;
+    }
+
+    .dlg-close:hover {
+      background: rgba(255, 60, 80, .15);
+      border-color: rgba(255, 60, 80, .4);
+      color: #ff6080;
+    }
+
+    .dlg-img-wrap {
+      margin: 1rem 1.2rem 0;
+      border-radius: 14px;
+      overflow: hidden;
+      background: var(--card2);
+      height: 190px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .dlg-img-wrap img {
+      height: 100%;
+      width: 100%;
+      object-fit: contain;
+    }
+
+    .dlg-img-wrap::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 55%, var(--card));
+      pointer-events: none;
+    }
+
+    .dlg-body {
+      padding: 1.1rem 1.35rem 2rem;
+    }
+
+    .dlg-muscle {
+      display: inline-block;
+      padding: 4px 11px;
+      border-radius: 20px;
+      background: rgba(0, 200, 240, .1);
+      border: 1px solid rgba(0, 200, 240, .25);
+      font-size: .6rem;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--cyan2);
+      margin-bottom: .65rem;
+    }
+
+    .dlg-name {
+      font-family: 'Orbitron', monospace;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: .3rem;
+    }
+
+    .dlg-meta {
+      font-size: .8rem;
+      color: var(--muted);
+      margin-bottom: 1.1rem;
+    }
+
+    .dlg-sec {
+      margin-bottom: 1.15rem;
+    }
+
+    .dlg-sec-title {
+      font-size: .62rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--cyan);
+      font-weight: 700;
+      margin-bottom: .65rem;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+
+    .dlg-sec-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .steps {
+      display: flex;
+      flex-direction: column;
+      gap: .55rem;
+    }
+
+    .step {
+      display: flex;
+      gap: .75rem;
+      align-items: flex-start;
+    }
+
+    .step-n {
+      width: 22px;
+      height: 22px;
+      border-radius: 6px;
+      background: linear-gradient(135deg, var(--blue), var(--cyan2));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Orbitron', monospace;
+      font-size: .58rem;
+      font-weight: 700;
+      color: #fff;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .step-t {
+      font-size: .86rem;
+      color: var(--text);
+      line-height: 1.55;
+    }
+
+    .tips {
+      display: flex;
+      flex-direction: column;
+      gap: .48rem;
+    }
+
+    .tip {
+      display: flex;
+      gap: .65rem;
+      align-items: flex-start;
+      font-size: .82rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .tip-ic {
+      color: var(--cyan);
+      flex-shrink: 0;
+    }
+
+    .dlg-btn {
+      width: 100%;
+      padding: 13px;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      font-family: 'Orbitron', monospace;
+      font-size: .75rem;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #fff;
+      background: linear-gradient(135deg, var(--blue), var(--cyan2));
+      box-shadow: 0 0 20px rgba(0, 200, 240, .3);
+      margin-top: 1.3rem;
+      transition: transform .2s, box-shadow .2s;
+    }
+
+    .dlg-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 34px rgba(0, 200, 240, .5);
+    }
+
+    /* SCROLLBAR */
+    ::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--borderH);
+      border-radius: 4px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="bg-grid"></div>
+  <div class="bg-glow"></div>
+
+  <nav class="navbar">
+    <a href="dashboard.html" class="nav-logo">
+      <div class="nav-ico">
+        <svg viewBox="0 0 24 24">
+          <line x1="6" y1="5" x2="6" y2="19" />
+          <line x1="18" y1="5" x2="18" y2="19" />
+          <line x1="2" y1="9" x2="6" y2="9" />
+          <line x1="18" y1="9" x2="22" y2="9" />
+          <line x1="2" y1="15" x2="6" y2="15" />
+          <line x1="18" y1="15" x2="22" y2="15" />
+          <line x1="6" y1="12" x2="18" y2="12" />
+        </svg>
+      </div>
+      <span class="nav-brand">IRONPULSE</span>
+    </a>
+    <div class="nav-right">
+      <div class="nav-date" id="navDate"></div>
+      <div class="nav-av" id="navAv">A</div>
+    </div>
+  </nav>
+
+  <main class="main">
+
+    <div class="welcome">
+      <div class="w-tag">Welcome Back</div>
+      <div class="w-name" id="wName">Athlete 👋</div>
+      <div class="w-sub" id="wSub">Ready to crush today?</div>
+      <div class="w-badge wb-on" id="wBadge">💪 Active</div>
+    </div>
+
+    <div class="sec">Today's Stats</div>
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-ico">🔥</div>
+        <div class="stat-val" id="sCal">—</div>
+        <div class="stat-lbl">Calories</div>
+      </div>
+      <div class="stat">
+        <div class="stat-ico">⏱</div>
+        <div class="stat-val" id="sTime">—</div>
+        <div class="stat-lbl">Duration</div>
+      </div>
+      <div class="stat">
+        <div class="stat-ico">💪</div>
+        <div class="stat-val" id="sSets">—</div>
+        <div class="stat-lbl">Sets</div>
+      </div>
+    </div>
+
+    <div class="sec">Today's Workout</div>
+    <div class="wk-card">
+      <div class="wk-head">
+        <div>
+          <div class="wk-day" id="wkDay">—</div>
+          <div class="wk-name" id="wkName">—</div>
+        </div>
+        <div class="wk-badge b-go" id="wkBadge">⚡ Active</div>
+      </div>
+      <div class="wk-body" id="wkBody"></div>
+      <div class="wk-footer" id="wkFoot"></div>
+    </div>
+
+    <div class="sec">Daily Fuel</div>
+    <div class="quote">
+      <div class="q-text" id="qText">...</div>
+      <div class="q-author" id="qAuth">—</div>
+    </div>
+
+    <div class="sec">This Week</div>
+    <div class="week-grid" id="weekGrid"></div>
+
+    <div class="sec">Nutrition Target</div>
+    <div class="diet">
+      <div class="diet-head">
+        <div>
+          <div class="diet-name" id="dietName">Custom Plan</div>
+          <div class="diet-sub" id="dietSub">Based on your profile</div>
+        </div>
+        <a href="diet.html" class="diet-link">Full Plan →</a>
+      </div>
+      <div class="macros">
+        <div class="macro p">
+          <div class="macro-val" id="mPro">—g</div>
+          <div class="macro-lbl">Protein</div>
+        </div>
+        <div class="macro c">
+          <div class="macro-val" id="mCarb">—g</div>
+          <div class="macro-lbl">Carbs</div>
+        </div>
+        <div class="macro f">
+          <div class="macro-val" id="mFat">—g</div>
+          <div class="macro-lbl">Fats</div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <nav class="bnav">
+    <a href="dashboard.html" class="bn active">
+      <svg viewBox="0 0 24 24">
+        <rect x="3" y="3" width="7" height="7" rx="1" />
+        <rect x="14" y="3" width="7" height="7" rx="1" />
+        <rect x="3" y="14" width="7" height="7" rx="1" />
+        <rect x="14" y="14" width="7" height="7" rx="1" />
+      </svg>
+      <span>Home</span>
+    </a>
+    <a href="exercise.html" class="bn">
+      <svg viewBox="0 0 24 24">
+        <path d="M6.5 5.5v13M17.5 5.5v13M2 8.5h4M18 8.5h4M2 15.5h4M18 15.5h4M6.5 12h11" />
+      </svg>
+      <span>Workout</span>
+    </a>
+    <a href="diet.html" class="bn">
+      <svg viewBox="0 0 24 24">
+        <path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2z" />
+        <path d="M12 6v6l4 2" />
+      </svg>
+      <span>Diet</span>
+    </a>
+    <a href="guidelines.html" class="bn">
+      <svg viewBox="0 0 24 24">
+        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+      </svg>
+      <span>Guide</span>
+    </a>
+  </nav>
+
+  <div class="overlay" id="overlay" onclick="closeDialog(event)">
+    <div class="dialog" id="dialog">
+      <div class="dlg-handle"></div>
+      <div class="dlg-close" onclick="closeOverlay()">✕</div>
+      <div class="dlg-img-wrap"><img id="dlgImg" src="" alt="Muscle" /></div>
+      <div class="dlg-body">
+        <div class="dlg-muscle" id="dlgMuscle">—</div>
+        <div class="dlg-name" id="dlgName">—</div>
+        <div class="dlg-meta" id="dlgMeta">—</div>
+        <div class="dlg-sec">
+          <div class="dlg-sec-title">How To Perform</div>
+          <div class="steps" id="dlgSteps"></div>
+        </div>
+        <div class="dlg-sec">
+          <div class="dlg-sec-title">Pro Tips</div>
+          <div class="tips" id="dlgTips"></div>
+        </div>
+        <button class="dlg-btn" onclick="closeOverlay()">✓ Got It — Let's Go!</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    var IMGS = {
+      'Abs': 'https://i.ibb.co/zhTm5Hcb/66b4fd6f-ea84-4e74-b055-5c467c60357e.png',
+      'Biceps': 'https://i.ibb.co/jPYL2h43/f13e9393-696c-4866-adc4-e5e19bf63404.png',
+      'Calves': 'https://i.ibb.co/V0SQDJK4/5ef8469e-2bfc-45c2-a9d7-4e064aeb0d6e.png',
+      'Chest': 'https://i.ibb.co/mCrH15H1/e3a3f45d-a346-4f8d-a90a-279fb14c5888.png',
+      'Forearms': 'https://i.ibb.co/k6JB7VK1/4b76e093-1b92-4961-aee5-46aaf34a2acc.png',
+      'Glutes': 'https://i.ibb.co/Kp3Qrz0h/b1d01d2a-da34-4ba4-88ad-e011919ce8a6.png',
+      'Hamstrings': 'https://i.ibb.co/Zz6fr50T/c4003919-8f59-4f3e-88ca-0dcc8ccad2bb.png',
+      'Hip Flexors': 'https://i.ibb.co/vCpK36x8/de422dd2-da85-4622-98c0-31663f375e1a.png',
+      'Lats': 'https://i.ibb.co/wNQx5sZh/cb701539-5cd9-4dd7-8837-cffd2c4f6f4f.png',
+      'Lower Back': 'https://i.ibb.co/whS4SZ4J/dc92a57e-53c4-4509-b48f-96b582b4e799.png',
+      'Upper Back': 'https://i.ibb.co/k2ns0gPg/2a36d28f-869c-4e90-b0fb-103fecdb3e22.png',
+      'Mid Back': 'https://i.ibb.co/k2ns0gPg/2a36d28f-869c-4e90-b0fb-103fecdb3e22.png',
+      'Obliques': 'https://i.ibb.co/tT209G6x/7221a991-02b5-45b7-8d17-8003283d1cfb.png',
+      'Quads': 'https://i.ibb.co/Zz0ZxycR/d09d3cfd-4cbe-4731-813c-bc843eb27722.png',
+      'Shoulders': 'https://i.ibb.co/Zz83QSQ9/32c46a18-9adf-4302-8d94-4c0d4f0ee246.png',
+      'Side Delt': 'https://i.ibb.co/Zz83QSQ9/32c46a18-9adf-4302-8d94-4c0d4f0ee246.png',
+      'Front Delt': 'https://i.ibb.co/Zz83QSQ9/32c46a18-9adf-4302-8d94-4c0d4f0ee246.png',
+      'Traps': 'https://i.ibb.co/Ndzn5jD5/4fff1470-e653-4c4b-8399-0461bced0c7c.png',
+      'Triceps': 'https://i.ibb.co/GQ9sGHvZ/470184da-a3e0-4a6a-a0e9-e6544c05fc14.png',
+      'Core': 'https://i.ibb.co/zhTm5Hcb/66b4fd6f-ea84-4e74-b055-5c467c60357e.png',
+      'Full Body': 'https://i.ibb.co/CKJ4r8tF/348282bd-f49e-449f-bdae-248ad868ce7a.png',
+      'Posterior': 'https://i.ibb.co/CKJ4r8tF/348282bd-f49e-449f-bdae-248ad868ce7a.png',
+      'Legs': 'https://i.ibb.co/Zz0ZxycR/d09d3cfd-4cbe-4731-813c-bc843eb27722.png',
+      'Upper Chest': 'https://i.ibb.co/mCrH15H1/e3a3f45d-a346-4f8d-a90a-279fb14c5888.png'
+    };
+
+    var QUOTES = [
+      { t: "Sunday is your best day. You know what you accomplished this week.", a: "— Unknown" },
+      { t: "The only bad workout is the one that didn't happen.", a: "— Unknown" },
+      { t: "Train insane or remain the same.", a: "— Jadah Sellner" },
+      { t: "Your body can stand almost anything. It's your mind you have to convince.", a: "— Unknown" },
+      { t: "Champions are made from something deep inside — a desire, a dream, a vision.", a: "— Muhammad Ali" },
+      { t: "The pain you feel today will be the strength you feel tomorrow.", a: "— Unknown" },
+      { t: "If it doesn't challenge you, it doesn't change you.", a: "— Fred DeVito" }
+    ];
+
+    var SCH = {
+      0: { name: 'Rest Day', icon: '😴', focus: 'Recovery', rest: true },
+      1: { name: 'Chest & Triceps', icon: '💪', focus: 'Push Day', rest: false },
+      2: { name: 'Back & Biceps', icon: '🏋️', focus: 'Pull Day', rest: false },
+      3: { name: 'Legs & Glutes', icon: '🦵', focus: 'Lower Body', rest: false },
+      4: { name: 'Shoulders & Core', icon: '🔥', focus: 'Upper Body', rest: false },
+      5: { name: 'Full Body HIIT', icon: '⚡', focus: 'Cardio & Strength', rest: false },
+      6: { name: 'Arms & Abs', icon: '💥', focus: 'Arm Day', rest: false }
+    };
+
+    var SUBS = [
+      'Rest up. Recovery is part of the grind. 🛌',
+      "Let's crush chest & triceps today! 💪",
+      "Back & biceps — pull hard! 🏋️",
+      'Leg day. No skipping. 🦵',
+      "Shoulders & core — build that V-taper! 🔥",
+      'HIIT day — burn it all! ⚡',
+      'Arm day — make them count! 💥'
+    ];
+
+    var EX = {
+      1: [
+        { name: 'Bench Press', sets: '4 × 10', muscle: 'Chest', cal: 80, steps: ['Lie flat on bench, grip bar slightly wider than shoulder-width.', 'Lower bar slowly to mid-chest, elbows at 45°.', 'Press bar up explosively until arms are fully extended.', 'Exhale on the push, inhale on the way down.'], tips: ['Keep feet flat on floor for stability.', 'Never bounce the bar off your chest.', 'Retract shoulder blades throughout the lift.'] },
+        { name: 'Incline Dumbbell Press', sets: '3 × 12', muscle: 'Upper Chest', cal: 65, steps: ['Set bench to 30–45°. Hold dumbbells at chest level.', 'Press dumbbells up and slightly inward until arms extend.', 'Lower slowly back to chest with full control.', 'Keep wrists straight, elbows at ~75°.'], tips: ['Higher incline hits front delts more — keep it 30–45°.', 'Squeeze chest hard at the top of every rep.', 'Use a spotter for heavier sets.'] },
+        { name: 'Cable Flyes', sets: '3 × 15', muscle: 'Chest', cal: 55, steps: ['Set cables at shoulder height, stand in the centre.', 'Step forward slightly, lean forward at hips.', 'Bring hands together in a wide arc in front of chest.', 'Slowly return to start, elbows slightly bent.'], tips: ['Keep a slight bend in elbows throughout.', 'Focus on squeezing chest, not arms.', 'Control the negative (return) phase — don\'t let it snap back.'] },
+        { name: 'Tricep Pushdowns', sets: '3 × 12', muscle: 'Triceps', cal: 50, steps: ['Attach rope or bar to high cable, face the machine.', 'Pin elbows to sides. Push bar down until arms are straight.', 'Squeeze triceps at the bottom for 1 second.', 'Slowly return — keep elbows at sides.'], tips: ['Never swing your body — isolate the triceps.', 'Elbows must stay fixed at your sides at all times.', 'Full extension at bottom = full muscle contraction.'] },
+        { name: 'Skull Crushers', sets: '3 × 10', muscle: 'Triceps', cal: 55, steps: ['Lie on bench, hold EZ-bar above chest, arms extended.', 'Slowly lower bar toward forehead by bending elbows only.', 'Stop just before bar touches forehead, then press back up.', 'Keep upper arms vertical and stationary throughout.'], tips: ['Go slow — this exercise is dangerous with poor form.', 'Use a spotter for anything above light-moderate weight.', 'Only forearms move — upper arms stay perfectly still.'] }
+      ],
+      2: [
+        { name: 'Deadlift', sets: '4 × 8', muscle: 'Lower Back', cal: 100, steps: ['Feet hip-width, bar over mid-foot. Hinge at hips, grab bar outside legs.', 'Flatten your back, take a deep breath and brace your core.', 'Drive through heels, push hips forward as you stand up.', 'Lower by hinging hips back first, then bending knees.'], tips: ['NEVER round your lower back — this is the #1 injury risk.', 'Keep bar close — it should drag up your shins.', 'Engage lats before every pull by "protecting your armpits".'] },
+        { name: 'Pull-Ups', sets: '4 × 10', muscle: 'Lats', cal: 70, steps: ['Overhand grip, hands shoulder-width apart. Hang fully.', 'Pull chest to bar by driving elbows down and back.', 'Hold chin above bar for 1 second at the top.', 'Lower slowly until arms are fully extended.'], tips: ['Avoid kipping — full range builds more muscle.', 'Cross your feet to keep body stable.', 'Too hard? Use an assisted pull-up machine to build up.'] },
+        { name: 'Seated Cable Row', sets: '3 × 12', muscle: 'Mid Back', cal: 60, steps: ['Sit at cable row, feet on platform, knees slightly bent.', 'Grab handle, sit tall with chest up.', 'Pull handle to lower chest squeezing shoulder blades.', 'Slowly extend arms back — don\'t let weight pull you.'], tips: ['Don\'t lean back excessively — torso nearly upright.', 'Squeeze shoulder blades hard at the end of every rep.', 'Control the return — slow and steady.'] },
+        { name: 'Barbell Curl', sets: '3 × 12', muscle: 'Biceps', cal: 50, steps: ['Stand feet shoulder-width, hold barbell underhand.', 'Pin elbows to sides. Curl bar up toward shoulders.', 'Squeeze biceps at the top, hold 1 second.', 'Lower slowly over 3 seconds back to start.'], tips: ['No swinging — body stays completely still.', 'Full range: fully extended to fully contracted.', 'Lighter weight with perfect form beats heavy + sloppy.'] },
+        { name: 'Hammer Curls', sets: '3 × 15', muscle: 'Biceps', cal: 45, steps: ['Hold dumbbells with neutral grip (palms facing each other).', 'Keep elbows at sides. Curl dumbbells up alternately.', 'Squeeze at top, then lower with control.', 'Maintain upright posture throughout.'], tips: ['Hammer grip also builds brachialis — adds arm thickness.', 'Alternate arms for more time under tension.', 'Don\'t let shoulders roll forward.'] }
+      ],
+      3: [
+        { name: 'Barbell Squat', sets: '4 × 10', muscle: 'Quads', cal: 110, steps: ['Bar on upper traps, feet shoulder-width, toes slightly out.', 'Deep breath, brace core, push hips back and down.', 'Descend until thighs are parallel to floor or below.', 'Drive through heels, knees tracking over toes.'], tips: ['Knees track over toes — never cave inward.', 'Chest up, look slightly forward — not straight up.', 'Brace core like you\'re about to take a punch.'] },
+        { name: 'Romanian Deadlift', sets: '3 × 12', muscle: 'Hamstrings', cal: 90, steps: ['Stand with barbell at hips, soft bend in knees.', 'Hinge at hips, push them back as bar lowers down legs.', 'Lower until strong stretch in hamstrings is felt.', 'Drive hips forward to return to standing.'], tips: ['Keep bar close to legs — don\'t let it drift forward.', 'You should feel it in hamstrings, not lower back.', 'Never round your back — flat spine throughout.'] },
+        { name: 'Leg Press', sets: '3 × 15', muscle: 'Quads', cal: 75, steps: ['Sit in machine, feet shoulder-width on platform.', 'Lower platform until knees reach 90° or slightly below.', 'Press through heels, legs nearly straight.', 'Lower weight slowly back to 90° and repeat.'], tips: ['Lower back must not lift off the pad.', 'Higher foot position targets glutes; lower targets quads.', 'Never fully lock out knees at the top.'] },
+        { name: 'Walking Lunges', sets: '3 × 20', muscle: 'Glutes', cal: 70, steps: ['Stand tall, step forward with right foot into a lunge.', 'Lower back knee toward floor — front knee stays over ankle.', 'Push through front heel to bring feet together.', 'Repeat with left leg, continue walking forward.'], tips: ['Keep torso upright — don\'t lean forward.', 'Large steps = more glute activation.', 'Hold dumbbells to increase difficulty.'] },
+        { name: 'Calf Raises', sets: '4 × 20', muscle: 'Calves', cal: 40, steps: ['Stand on edge of step or flat floor, feet hip-width.', 'Rise up on toes as high as possible, squeeze at top.', 'Hold the peak contraction for 1–2 seconds.', 'Lower heels below step level for full stretch.'], tips: ['Full range of motion is essential for calf growth.', 'Slow reps with a pause at top work best.', 'Single-leg raises increase difficulty significantly.'] }
+      ],
+      4: [
+        { name: 'Overhead Press', sets: '4 × 10', muscle: 'Shoulders', cal: 80, steps: ['Hold barbell at shoulders, hands just outside shoulder-width.', 'Brace core, press bar straight up until arms are fully extended.', 'Lower bar back to shoulders with control.', 'Avoid excessive back arch — use leg drive carefully.'], tips: ['Elbows slightly in front of bar — not flared out wide.', 'Keep core tight to protect the lower back.', 'Full lockout at top builds more strength over time.'] },
+        { name: 'Lateral Raises', sets: '4 × 15', muscle: 'Side Delt', cal: 55, steps: ['Hold dumbbells at sides with slight bend in elbows.', 'Raise arms out to sides until parallel to floor.', 'Hold at top for 1 second, then lower slowly.', 'Keep wrists neutral and lead with elbows.'], tips: ['Go light — most people use too much weight here.', 'Lead with elbows, not hands.', 'Slight forward lean puts more stress on lateral head.'] },
+        { name: 'Front Raises', sets: '3 × 12', muscle: 'Front Delt', cal: 50, steps: ['Hold dumbbells in front of thighs, palms facing down.', 'Raise one or both arms forward to shoulder height.', 'Hold briefly at top, then lower with control.', 'Keep a slight bend in elbows throughout.'], tips: ['Avoid swinging — controlled motion only.', 'Don\'t raise above shoulder height — strain risk increases.', 'Alternate arms for more stability.'] },
+        { name: 'Plank', sets: '3 × 60s', muscle: 'Core', cal: 40, steps: ['Start in push-up position on forearms, wrists under shoulders.', 'Keep body in a straight line from head to heels.', 'Engage core, squeeze glutes and hold the position.', 'Breathe steadily throughout the hold.'], tips: ['Don\'t let hips sag or pike up — straight line is key.', 'Look down at the floor to keep neck neutral.', 'Build up time gradually — quality beats duration.'] },
+        { name: 'Russian Twists', sets: '3 × 20', muscle: 'Obliques', cal: 45, steps: ['Sit with knees bent, lean back slightly, feet off floor.', 'Hold weight or clasp hands at chest.', 'Rotate torso to one side then the other — that\'s one rep.', 'Keep core engaged and feet elevated throughout.'], tips: ['Slow reps = more oblique engagement.', 'Touch the floor beside each hip for full range.', 'Adding weight significantly increases the challenge.'] }
+      ],
+      5: [
+        { name: 'Burpees', sets: '4 × 15', muscle: 'Full Body', cal: 120, steps: ['Drop hands to floor and jump feet back to plank position.', 'Perform one push-up with tight form.', 'Jump feet back to hands, then explode upward.', 'Land softly and immediately start the next rep.'], tips: ['Keep push-up form tight — hips must not sag.', 'Scale by stepping back instead of jumping.', 'Pace yourself — burpees are brutally taxing.'] },
+        { name: 'Box Jumps', sets: '4 × 12', muscle: 'Legs', cal: 90, steps: ['Stand in front of box, feet shoulder-width, knees soft.', 'Swing arms back, bend knees, then explode upward onto box.', 'Land softly with both feet, absorb impact by bending knees.', 'Step down carefully — never jump down.'], tips: ['Always step down — jumping down raises injury risk.', 'Land with soft knees — never stiff-legged.', 'Start with a lower box and progress gradually.'] },
+        { name: 'Mountain Climbers', sets: '3 × 30', muscle: 'Core', cal: 80, steps: ['Start in high plank, wrists under shoulders.', 'Drive right knee toward chest, then quickly switch legs.', 'Alternate as fast as controlled form allows.', 'Hips stay level — don\'t let them rise or sink.'], tips: ['Faster = more cardio benefit; slower = more core strength.', 'Keep core tight — don\'t let lower back sag.', 'Breathe rhythmically throughout.'] },
+        { name: 'Kettlebell Swings', sets: '3 × 20', muscle: 'Posterior', cal: 85, steps: ['Feet shoulder-width, kettlebell between feet on floor.', 'Hinge at hips, grab bell, hike it back between legs.', 'Drive hips forward explosively — bell swings to shoulder height.', 'Let bell swing back and hinge hips to absorb — repeat.'], tips: ['Hip hinge — NOT a squat. Back stays flat at all times.', 'Power comes from the hips, not the arms.', 'Keep a firm grip and engage lats throughout.'] },
+        { name: 'Battle Ropes', sets: '3 × 30s', muscle: 'Full Body', cal: 95, steps: ['Grab one end of rope in each hand, athletic stance.', 'Alternate raising and lowering each arm rapidly.', 'Keep core tight and knees slightly bent.', 'Maintain consistent wave height for the full 30 seconds.'], tips: ['Stay low — athletic stance gives better power transfer.', 'Engage core and legs, not just arms.', 'Try double waves or slams for variation.'] }
+      ],
+      6: [
+        { name: 'Barbell Curl', sets: '4 × 12', muscle: 'Biceps', cal: 55, steps: ['Stand feet shoulder-width, hold barbell underhand.', 'Pin elbows to sides. Curl bar up toward shoulders.', 'Squeeze biceps hard at top for 1 second.', 'Lower slowly over 3 seconds back to start.'], tips: ['Full range of motion is essential for bicep growth.', 'No body swinging — stay completely still.', 'Vary grip width to hit different parts of the bicep.'] },
+        { name: 'Concentration Curl', sets: '3 × 15', muscle: 'Biceps', cal: 45, steps: ['Sit on bench, lean forward, rest elbow on inner thigh.', 'Hold dumbbell underhand, arm fully extended.', 'Curl dumbbell up toward shoulder, squeeze at top.', 'Lower slowly — let gravity stretch the bicep fully.'], tips: ['Isolation move — go lighter and feel the muscle working.', 'Squeeze hard at the top of every single rep.', 'Slow and controlled builds the bicep peak.'] },
+        { name: 'Tricep Dips', sets: '4 × 12', muscle: 'Triceps', cal: 60, steps: ['Grip parallel bars, arms straight, body upright.', 'Lower by bending elbows until upper arms are parallel.', 'Push back up through palms until arms are straight.', 'Keep torso slightly forward to target triceps.'], tips: ['Upright = more triceps; leaning forward = more chest.', 'Don\'t go too deep — shoulder strain risk increases.', 'Add a weight belt when bodyweight becomes easy.'] },
+        { name: 'Diamond Push-Ups', sets: '3 × 15', muscle: 'Triceps', cal: 55, steps: ['Push-up position, form diamond with thumbs and index fingers.', 'Lower chest to hands, elbows close to body.', 'Push back up to start, fully extending arms.', 'Keep body in straight line throughout.'], tips: ['Narrower grip = more tricep isolation.', '3 seconds down, 1 second up for maximum tension.', 'Elevate feet to significantly increase difficulty.'] },
+        { name: 'Crunches', sets: '4 × 25', muscle: 'Abs', cal: 40, steps: ['Lie on back, knees bent, feet flat, hands behind head.', 'Engage core, curl shoulders up toward knees.', 'Hold peak contraction for 1 second — feel the burn.', 'Lower slowly — don\'t fully relax between reps.'], tips: ['Don\'t pull your neck — hands just support the head.', 'Exhale forcefully at the top of each crunch.', 'Slow reps with full contraction beat fast sloppy ones.'] }
+      ]
+    };
+
+    var DIET_DATA = {
+      'skinny-build': { name: 'Mass Gain Protocol', sub: 'High calorie surplus', pro: 180, carb: 320, fat: 70 },
+      'skinny-lose': { name: 'Lean Tone Plan', sub: 'Moderate deficit + protein', pro: 150, carb: 200, fat: 55 },
+      'skinny-fit': { name: 'Lean Athletic Plan', sub: 'Balanced macros', pro: 155, carb: 240, fat: 60 },
+      'skinny-endurance': { name: 'Endurance Fuel Plan', sub: 'Carb-forward energy', pro: 145, carb: 290, fat: 55 },
+      'average-build': { name: 'Hypertrophy Program', sub: 'Clean bulk macros', pro: 175, carb: 280, fat: 65 },
+      'average-lose': { name: 'Cut & Define Plan', sub: 'Caloric deficit plan', pro: 165, carb: 180, fat: 50 },
+      'average-fit': { name: 'Balanced Performance', sub: 'Maintenance macros', pro: 160, carb: 220, fat: 60 },
+      'average-endurance': { name: 'Stamina Builder', sub: 'High carb endurance', pro: 150, carb: 300, fat: 55 },
+      'muscular-build': { name: 'Advanced Strength Plan', sub: 'Power surplus macros', pro: 210, carb: 310, fat: 80 },
+      'muscular-lose': { name: 'Shred & Maintain', sub: 'Aggressive cut plan', pro: 200, carb: 180, fat: 60 },
+      'muscular-fit': { name: 'Athletic Maintenance', sub: 'Performance macros', pro: 190, carb: 250, fat: 70 },
+      'muscular-endurance': { name: 'Power Endurance Plan', sub: 'Fuel for performance', pro: 185, carb: 300, fat: 65 }
+    };
+
+    const SUPABASE_URL = 'https://vwqogdtowvfdqiknkmvg.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ3cW9nZHRvd3ZmZHFpa25rbXZnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkxMTY2NTEsImV4cCI6MjA5NDY5MjY1MX0.ZiVg002fi-nn8ae7qWAEmHaPWejRhRdPIsJ7NfI9rfE';
+
+    document.addEventListener('DOMContentLoaded', async function () {
+      var now = new Date();
+      var day = now.getDay();
+      var DNAMES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+      var MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+      document.getElementById('navDate').textContent = DNAMES[day] + ', ' + now.getDate() + ' ' + MONTHS[now.getMonth()];
+
+      let uName = localStorage.getItem('ip_name') || 'Athlete';
+      let uBody = localStorage.getItem('ip_body') || 'average';
+      let uGoal = localStorage.getItem('ip_goal') || 'fit';
+
+      try {
+        const { createClient } = await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm');
+        const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user) {
+          const { data: profile } = await supabase.from('profiles').select('full_name, body_type, goal').eq('id', user.id).single();
+          if (profile) {
+            uName = profile.full_name || uName;
+            uBody = profile.body_type || uBody;
+            uGoal = profile.goal || uGoal;
+            localStorage.setItem('ip_name', uName);
+            localStorage.setItem('ip_body', uBody);
+            localStorage.setItem('ip_goal', uGoal);
+          }
+        }
+      } catch (err) { console.log(err); }
+
+      document.getElementById('wName').textContent = 'Hey, ' + uName + ' 👋';
+      document.getElementById('wSub').textContent = SUBS[day];
+      document.getElementById('navAv').textContent = uName.charAt(0).toUpperCase();
+      document.getElementById('qText').textContent = QUOTES[day].t;
+      document.getElementById('qAuth').textContent = QUOTES[day].a;
+
+      buildWorkout(day, DNAMES);
+      buildWeek(day);
+      buildDiet(uBody, uGoal);
+    });
+
+    function buildWorkout(day, DNAMES) {
+      var s = SCH[day];
+      document.getElementById('wkDay').textContent = DNAMES[day];
+      document.getElementById('wkName').textContent = s.name;
+
+      if (s.rest) {
+        document.getElementById('wkBadge').textContent = '😴 Rest Day';
+        document.getElementById('wkBadge').className = 'wk-badge b-rest';
+        document.getElementById('wBadge').textContent = '😴 Rest Day';
+        document.getElementById('wBadge').className = 'w-badge wb-off';
+        document.getElementById('wkBody').innerHTML =
+          '<div class="rest-box"><div class="ri">🛌</div><div class="rt">Recovery Day</div>' +
+          '<div class="rd">Muscles grow during rest.<br>Stretch, hydrate and sleep well tonight.</div></div>';
+        document.getElementById('wkFoot').innerHTML = '';
+        document.getElementById('sCal').textContent = '0';
+        document.getElementById('sTime').textContent = 'Rest';
+        document.getElementById('sSets').textContent = '0';
+        return;
+      }
+
+      document.getElementById('wkBadge').textContent = '⚡ ' + s.focus;
+      var exs = EX[day] || [];
+      var totalCal = exs.reduce(function (a, e) { return a + e.cal; }, 0);
+      document.getElementById('sCal').textContent = totalCal;
+      document.getElementById('sTime').textContent = (exs.length * 8) + 'm';
+      document.getElementById('sSets').textContent = (exs.length * 3);
+
+      var html = '<div class="ex-list">';
+      exs.forEach(function (ex, i) {
+        html += '<div class="ex-item" onclick="openDialog(' + i + ',' + day + ')">';
+        html += '<div class="ex-num">' + String(i + 1).padStart(2, '0') + '</div>';
+        html += '<div class="ex-info"><div class="ex-name">' + ex.name + '</div>';
+        html += '<div class="ex-detail">' + ex.sets + ' &nbsp;·&nbsp; ~' + ex.cal + ' kcal</div></div>';
+        html += '<div class="ex-tag">' + ex.muscle + '</div>';
+        html += '<div class="ex-arr">›</div>';
+        html += '</div>';
+      });
+      html += '</div>';
+      document.getElementById('wkBody').innerHTML = html;
+      document.getElementById('wkFoot').innerHTML =
+        '<button class="btn-wk btn-go" onclick="window.location.href=\'exercise.html\'">⚡ Veiw All →</button>';
+    }
+
+    function buildWeek(today) {
+      var SHORT = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+      var ICONS = ['😴', '💪', '🏋️', '🦵', '🔥', '⚡', '💥'];
+      var html = '';
+      for (var i = 0; i < 7; i++) {
+        var cls = 'wp';
+        if (i === today) cls += ' today';
+        else if (i === 0) cls += ' rest-wk';
+        else if (i < today) cls += ' done';
+        var ico = (i < today && i > 0) ? '✅' : ICONS[i];
+        html += '<div class="' + cls + '">';
+        html += '<div class="wp-name">' + SHORT[i] + '</div>';
+        html += '<div class="wp-ico">' + ico + '</div>';
+        html += '<div class="wp-dot"></div>';
+        html += '</div>';
+      }
+      document.getElementById('weekGrid').innerHTML = html;
+    }
+
+    function buildDiet(body, goal) {
+      var key = body + '-' + goal;
+      var plan = DIET_DATA[key] || DIET_DATA['average-fit'];
+      document.getElementById('dietName').textContent = plan.name;
+      document.getElementById('dietSub').textContent = plan.sub;
+      document.getElementById('mPro').textContent = plan.pro + 'g';
+      document.getElementById('mCarb').textContent = plan.carb + 'g';
+      document.getElementById('mFat').textContent = plan.fat + 'g';
+    }
+
+    function openDialog(idx, day) {
+      var ex = EX[day][idx];
+      var img = IMGS[ex.muscle] || IMGS['Full Body'];
+      document.getElementById('dlgImg').src = img;
+      document.getElementById('dlgMuscle').textContent = ex.muscle;
+      document.getElementById('dlgName').textContent = ex.name;
+      document.getElementById('dlgMeta').textContent = ex.sets + '  ·  ~' + ex.cal + ' kcal per session';
+
+      var sh = '';
+      ex.steps.forEach(function (s, i) { sh += '<div class="step"><div class="step-n">' + (i + 1) + '</div><div class="step-t">' + s + '</div></div>'; });
+      document.getElementById('dlgSteps').innerHTML = sh;
+
+      var th = '';
+      ex.tips.forEach(function (t) { th += '<div class="tip"><span class="tip-ic">⚡</span>' + t + '</div>'; });
+      document.getElementById('dlgTips').innerHTML = th;
+
+      document.getElementById('overlay').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeOverlay() {
+      document.getElementById('overlay').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    function closeDialog(e) { if (e.target === document.getElementById('overlay')) closeOverlay(); }
+  </script>
+</body>
+
+</html>

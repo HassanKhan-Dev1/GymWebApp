@@ -1,0 +1,1741 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IronPulse — Nutrition</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;600;700&display=swap"
+    rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <style>
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg: #03070d;
+      --card: #080f1a;
+      --card2: #0a1525;
+      --card3: #0d1d35;
+      --cyan: #00fff7;
+      --cyan2: #00c8f0;
+      --blue: #004eff;
+      --green: #00ff88;
+      --orange: #ff8c00;
+      --yellow: #ffd600;
+      --red: #ff3860;
+      --purple: #a855f7;
+      --text: #cce8f4;
+      --muted: #3d6070;
+      --border: rgba(0, 255, 247, 0.1);
+      --borderH: rgba(0, 255, 247, 0.45);
+    }
+
+    html,
+    body {
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Rajdhani', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* ═══ BG ═══ */
+    .bg-grid {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background-image: linear-gradient(rgba(0, 255, 247, .025) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 255, 247, .025) 1px, transparent 1px);
+      background-size: 50px 50px;
+    }
+
+    .bg-glow {
+      position: fixed;
+      top: -20vh;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100vw;
+      height: 55vh;
+      background: radial-gradient(ellipse, rgba(0, 78, 255, .12) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ═══ NAVBAR ═══ */
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(3, 7, 13, .92);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 1.3rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 58px;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      text-decoration: none;
+    }
+
+    .nav-ico {
+      width: 32px;
+      height: 32px;
+      border-radius: 9px;
+      background: linear-gradient(145deg, #00c8f0, #004eff);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 14px rgba(0, 200, 240, .4);
+    }
+
+    .nav-ico svg {
+      width: 17px;
+      height: 17px;
+      stroke: #fff;
+      fill: none;
+      stroke-width: 2.3;
+      stroke-linecap: round;
+    }
+
+    .nav-brand {
+      font-family: 'Orbitron', monospace;
+      font-size: .85rem;
+      font-weight: 900;
+      letter-spacing: 3px;
+      background: linear-gradient(90deg, var(--cyan), #fff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .nav-back {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: .7rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color .2s;
+    }
+
+    .nav-back:hover {
+      color: var(--cyan);
+    }
+
+    .nav-back svg {
+      width: 16px;
+      height: 16px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+    }
+
+    /* ═══ MAIN ═══ */
+    .main {
+      position: relative;
+      z-index: 1;
+      padding: 1.3rem 1.1rem 5.5rem;
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    /* ═══ PAGE HEADER ═══ */
+    .page-head {
+      margin-bottom: 1.3rem;
+      opacity: 0;
+      transform: translateY(-18px);
+    }
+
+    .page-tag {
+      font-size: .6rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--cyan2);
+      margin-bottom: .3rem;
+    }
+
+    .page-title {
+      font-family: 'Orbitron', monospace;
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: #fff;
+      margin-bottom: .25rem;
+    }
+
+    .page-sub {
+      font-size: .85rem;
+      color: var(--muted);
+    }
+
+    /* ═══ HERO PLAN CARD ═══ */
+    .hero-card {
+      border-radius: 22px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      position: relative;
+      overflow: hidden;
+      opacity: 0;
+    }
+
+    .hero-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: inherit;
+      z-index: 0;
+    }
+
+    .hero-card::after {
+      content: '';
+      position: absolute;
+      top: -60px;
+      right: -40px;
+      width: 220px;
+      height: 220px;
+      background: radial-gradient(circle, rgba(255, 255, 255, .06), transparent 70%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-tag {
+      font-size: .58rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: .35rem;
+      font-weight: 700;
+    }
+
+    .hero-name {
+      font-family: 'Orbitron', monospace;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: .35rem;
+    }
+
+    .hero-desc {
+      font-size: .84rem;
+      line-height: 1.6;
+      margin-bottom: .9rem;
+    }
+
+    .hero-chips {
+      display: flex;
+      gap: .5rem;
+      flex-wrap: wrap;
+    }
+
+    .hero-chip {
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: .62rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    /* skinny */
+    .plan-skinny {
+      background: linear-gradient(135deg, rgba(168, 85, 247, .22), rgba(0, 78, 255, .12));
+      border: 1px solid rgba(168, 85, 247, .3);
+    }
+
+    .plan-skinny .hero-tag {
+      color: #c084fc;
+    }
+
+    .plan-skinny .hero-desc {
+      color: rgba(196, 132, 252, .75);
+    }
+
+    .plan-skinny .hero-chip {
+      background: rgba(168, 85, 247, .12);
+      border: 1px solid rgba(168, 85, 247, .3);
+      color: #c084fc;
+    }
+
+    /* average */
+    .plan-average {
+      background: linear-gradient(135deg, rgba(0, 200, 240, .18), rgba(0, 78, 255, .1));
+      border: 1px solid rgba(0, 200, 240, .25);
+    }
+
+    .plan-average .hero-tag {
+      color: var(--cyan2);
+    }
+
+    .plan-average .hero-desc {
+      color: rgba(0, 200, 240, .7);
+    }
+
+    .plan-average .hero-chip {
+      background: rgba(0, 200, 240, .1);
+      border: 1px solid rgba(0, 200, 240, .3);
+    }
+
+    /* muscular */
+    .plan-muscular {
+      background: linear-gradient(135deg, rgba(255, 140, 0, .2), rgba(255, 56, 96, .1));
+      border: 1px solid rgba(255, 140, 0, .28);
+    }
+
+    .plan-muscular .hero-tag {
+      color: var(--orange);
+    }
+
+    .plan-muscular .hero-desc {
+      color: rgba(255, 140, 0, .7);
+    }
+
+    .plan-muscular .hero-chip {
+      background: rgba(255, 140, 0, .1);
+      border: 1px solid rgba(255, 140, 0, .3);
+      color: var(--orange);
+    }
+
+    /* ═══ STATS STRIP ═══ */
+    .stats-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: .6rem;
+      margin-bottom: 1rem;
+      opacity: 0;
+    }
+
+    .stat-box {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: .85rem .6rem;
+      text-align: center;
+      transition: all .25s;
+    }
+
+    .stat-box:hover {
+      border-color: var(--borderH);
+      transform: translateY(-2px);
+    }
+
+    .stat-ico {
+      font-size: 1.1rem;
+      margin-bottom: .3rem;
+    }
+
+    .stat-val {
+      font-family: 'Orbitron', monospace;
+      font-size: .9rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 1px;
+    }
+
+    .stat-lbl {
+      font-size: .55rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* ═══ MACRO VISUAL CARD ═══ */
+    .macro-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 1.3rem 1.4rem;
+      margin-bottom: 1rem;
+      opacity: 0;
+    }
+
+    .macro-card-title {
+      font-family: 'Orbitron', monospace;
+      font-size: .78rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 1rem;
+    }
+
+    .macro-bars {
+      display: flex;
+      flex-direction: column;
+      gap: .75rem;
+    }
+
+    .macro-bar-row {
+      display: flex;
+      align-items: center;
+      gap: .9rem;
+    }
+
+    .mb-label {
+      width: 55px;
+      font-size: .68rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      flex-shrink: 0;
+    }
+
+    .mb-label.pro {
+      color: var(--cyan2);
+    }
+
+    .mb-label.carb {
+      color: var(--orange);
+    }
+
+    .mb-label.fat {
+      color: var(--red);
+    }
+
+    .mb-track {
+      flex: 1;
+      height: 8px;
+      background: rgba(255, 255, 255, .05);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .mb-fill {
+      height: 100%;
+      border-radius: 8px;
+      width: 0%;
+      transition: width 1.2s cubic-bezier(.22, 1, .36, 1);
+    }
+
+    .mb-fill.pro {
+      background: linear-gradient(90deg, #0066cc, var(--cyan2));
+      box-shadow: 0 0 8px rgba(0, 200, 240, .4);
+    }
+
+    .mb-fill.carb {
+      background: linear-gradient(90deg, #cc6600, var(--orange));
+      box-shadow: 0 0 8px rgba(255, 140, 0, .4);
+    }
+
+    .mb-fill.fat {
+      background: linear-gradient(90deg, #cc0033, var(--red));
+      box-shadow: 0 0 8px rgba(255, 56, 96, .4);
+    }
+
+    .mb-right {
+      text-align: right;
+      min-width: 52px;
+    }
+
+    .mb-grams {
+      font-family: 'Orbitron', monospace;
+      font-size: .78rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .mb-pct {
+      font-size: .58rem;
+      color: var(--muted);
+    }
+
+    /* Pie-style ring row */
+    .macro-ring-row {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .ring-wrap {
+      position: relative;
+      width: 80px;
+      height: 80px;
+      flex-shrink: 0;
+    }
+
+    .ring-wrap svg {
+      transform: rotate(-90deg);
+    }
+
+    .ring-center {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .ring-cal {
+      font-family: 'Orbitron', monospace;
+      font-size: .82rem;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1;
+    }
+
+    .ring-lbl {
+      font-size: .48rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .macro-legend {
+      display: flex;
+      flex-direction: column;
+      gap: .4rem;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .76rem;
+    }
+
+    .legend-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .legend-key {
+      color: var(--muted);
+    }
+
+    .legend-val {
+      color: var(--text);
+      font-weight: 600;
+      margin-left: auto;
+    }
+
+    /* ═══ WATER TRACKER ═══ */
+    .water-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 1.1rem 1.3rem;
+      margin-bottom: 1rem;
+      opacity: 0;
+    }
+
+    .water-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: .85rem;
+    }
+
+    .water-title {
+      font-family: 'Orbitron', monospace;
+      font-size: .78rem;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+
+    .water-progress {
+      font-size: .72rem;
+      color: var(--cyan2);
+      font-weight: 700;
+      font-family: 'Orbitron', monospace;
+    }
+
+    .water-track {
+      height: 5px;
+      background: rgba(0, 200, 240, .1);
+      border-radius: 5px;
+      overflow: hidden;
+      margin-bottom: .85rem;
+    }
+
+    .water-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--blue), var(--cyan));
+      border-radius: 5px;
+      box-shadow: 0 0 8px rgba(0, 255, 247, .4);
+      transition: width .5s cubic-bezier(.22, 1, .36, 1);
+    }
+
+    .water-cups {
+      display: flex;
+      gap: .4rem;
+      flex-wrap: wrap;
+    }
+
+    .wcup {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      border: 1.5px solid var(--border);
+      background: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: all .28s cubic-bezier(.34, 1.56, .64, 1);
+      position: relative;
+    }
+
+    .wcup:hover {
+      border-color: var(--cyan2);
+      transform: scale(1.12);
+    }
+
+    .wcup.full {
+      background: rgba(0, 200, 240, .14);
+      border-color: var(--cyan2);
+      box-shadow: 0 0 10px rgba(0, 200, 240, .2);
+    }
+
+    .wcup.full::after {
+      content: '✓';
+      position: absolute;
+      bottom: 2px;
+      right: 3px;
+      font-size: .5rem;
+      color: var(--cyan2);
+    }
+
+    /* ═══ SECTION LABEL ═══ */
+    .sec {
+      font-size: .62rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin: 1.3rem 0 .75rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+    }
+
+    .sec::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, var(--border), transparent);
+    }
+
+    /* ═══ MEAL TIME TABS ═══ */
+    .meal-tabs {
+      display: flex;
+      gap: .4rem;
+      overflow-x: auto;
+      padding-bottom: .3rem;
+      margin-bottom: 1rem;
+      scrollbar-width: none;
+    }
+
+    .meal-tabs::-webkit-scrollbar {
+      display: none;
+    }
+
+    .mtab {
+      padding: .55rem 1.1rem;
+      border-radius: 20px;
+      cursor: pointer;
+      white-space: nowrap;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--muted);
+      transition: all .22s;
+      flex-shrink: 0;
+    }
+
+    .mtab.active {
+      background: linear-gradient(135deg, var(--blue), var(--cyan2));
+      color: #fff;
+      border-color: transparent;
+      box-shadow: 0 0 16px rgba(0, 200, 240, .28);
+    }
+
+    .mtab:not(.active):hover {
+      border-color: var(--borderH);
+      color: var(--text);
+    }
+
+    /* ═══ MEAL CARDS ═══ */
+    .meal-list {
+      display: flex;
+      flex-direction: column;
+      gap: .65rem;
+    }
+
+    .meal-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      overflow: hidden;
+      position: relative;
+      opacity: 0;
+      transform: translateY(22px);
+      transition: border-color .22s, box-shadow .22s;
+    }
+
+    .meal-card::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      border-radius: 3px 0 0 3px;
+      opacity: 0;
+      transition: opacity .22s;
+    }
+
+    .meal-card:hover {
+      border-color: var(--borderH);
+      box-shadow: 0 8px 28px rgba(0, 0, 0, .3);
+    }
+
+    .meal-card:hover::before {
+      opacity: 1;
+    }
+
+    .meal-card.eaten {
+      border-color: rgba(0, 255, 136, .32);
+      background: rgba(0, 255, 136, .025);
+    }
+
+    .meal-card.eaten::before {
+      opacity: 1;
+      background: linear-gradient(180deg, #00aa55, var(--green));
+    }
+
+    .meal-card:not(.eaten)::before {
+      background: linear-gradient(180deg, var(--blue), var(--cyan2));
+    }
+
+    .meal-top {
+      display: flex;
+      align-items: flex-start;
+      gap: .85rem;
+      padding: .95rem 1rem .7rem;
+    }
+
+    .meal-emoji-wrap {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: var(--card2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      flex-shrink: 0;
+      border: 1px solid var(--border);
+    }
+
+    .meal-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .meal-name {
+      font-size: .94rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: .25rem;
+      transition: color .2s;
+    }
+
+    .meal-card.eaten .meal-name {
+      color: var(--green);
+    }
+
+    .meal-portion {
+      font-size: .72rem;
+      color: var(--muted);
+      margin-bottom: .45rem;
+      line-height: 1.4;
+    }
+
+    .meal-macros {
+      display: flex;
+      gap: .4rem;
+      flex-wrap: wrap;
+    }
+
+    .mmtag {
+      font-size: .58rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 2px 8px;
+      border-radius: 6px;
+    }
+
+    .mmt-cal {
+      background: rgba(255, 140, 0, .1);
+      color: var(--orange);
+      border: 1px solid rgba(255, 140, 0, .2);
+    }
+
+    .mmt-p {
+      background: rgba(0, 200, 240, .08);
+      color: var(--cyan2);
+      border: 1px solid rgba(0, 200, 240, .18);
+    }
+
+    .mmt-c {
+      background: rgba(255, 214, 0, .07);
+      color: var(--yellow);
+      border: 1px solid rgba(255, 214, 0, .18);
+    }
+
+    .mmt-f {
+      background: rgba(255, 56, 96, .07);
+      color: var(--red);
+      border: 1px solid rgba(255, 56, 96, .18);
+    }
+
+    .eat-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      background: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all .28s cubic-bezier(.34, 1.56, .64, 1);
+      font-size: .85rem;
+      color: var(--muted);
+      flex-shrink: 0;
+      margin-top: 6px;
+    }
+
+    .eat-btn:hover {
+      border-color: var(--green);
+      background: rgba(0, 255, 136, .1);
+      color: var(--green);
+      transform: scale(1.18);
+    }
+
+    .meal-card.eaten .eat-btn {
+      background: var(--green);
+      border-color: var(--green);
+      color: #000;
+    }
+
+    /* Meal mini-progress bar */
+    .meal-bar-wrap {
+      height: 3px;
+      background: rgba(255, 255, 255, .04);
+      margin: 0 1rem .8rem;
+    }
+
+    .meal-bar {
+      height: 100%;
+      border-radius: 3px;
+      transition: width .6s ease;
+    }
+
+    /* ═══ NUTRITION TIP ═══ */
+    .tip-card {
+      background: var(--card);
+      border: 1px solid rgba(0, 255, 136, .14);
+      border-radius: 18px;
+      padding: 1.2rem 1.4rem;
+      opacity: 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .tip-card::before {
+      content: '"';
+      position: absolute;
+      top: -10px;
+      left: 12px;
+      font-size: 7rem;
+      font-family: Georgia, serif;
+      color: rgba(0, 255, 136, .05);
+      line-height: 1;
+      pointer-events: none;
+    }
+
+    .tip-lbl {
+      font-size: .6rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--green);
+      margin-bottom: .5rem;
+      font-weight: 700;
+    }
+
+    .tip-text {
+      font-size: .9rem;
+      color: var(--text);
+      line-height: 1.7;
+      position: relative;
+    }
+
+    /* ═══ BOTTOM NAV ═══ */
+    .bnav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: rgba(6, 14, 24, .96);
+      backdrop-filter: blur(20px);
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      padding: .55rem 0 .7rem;
+    }
+
+    .bn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      text-decoration: none;
+      padding: .2rem .8rem;
+    }
+
+    .bn svg {
+      width: 21px;
+      height: 21px;
+      stroke: var(--muted);
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      transition: stroke .2s;
+    }
+
+    .bn span {
+      font-size: .57rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--muted);
+      transition: color .2s;
+    }
+
+    .bn.active svg {
+      stroke: var(--cyan);
+      filter: drop-shadow(0 0 4px rgba(0, 255, 247, .5));
+    }
+
+    .bn.active span {
+      color: var(--cyan);
+    }
+
+    /* ═══ SCROLLBAR ═══ */
+    ::webkit-scrollbar {
+      width: 4px;
+    }
+
+    ::webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::webkit-scrollbar-thumb {
+      background: var(--borderH);
+      border-radius: 4px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="bg-grid"></div>
+  <div class="bg-glow"></div>
+
+  <nav class="navbar">
+    <a href="dashboard.html" class="nav-logo">
+      <div class="nav-ico">
+        <svg viewBox="0 0 24 24">
+          <line x1="6" y1="5" x2="6" y2="19" />
+          <line x1="18" y1="5" x2="18" y2="19" />
+          <line x1="2" y1="9" x2="6" y2="9" />
+          <line x1="18" y1="9" x2="22" y2="9" />
+          <line x1="2" y1="15" x2="6" y2="15" />
+          <line x1="18" y1="15" x2="22" y2="15" />
+          <line x1="6" y1="12" x2="18" y2="12" />
+        </svg>
+      </div>
+      <span class="nav-brand">IRONPULSE</span>
+    </a>
+    <a href="dashboard.html" class="nav-back">
+      <svg viewBox="0 0 24 24">
+        <polyline points="15,18 9,12 15,6" />
+      </svg>
+      Dashboard
+    </a>
+  </nav>
+
+  <main class="main">
+    <div class="page-head" id="pageHead">
+      <div class="page-tag">Nutrition Program</div>
+      <div class="page-title">Your Diet Plan</div>
+      <div class="page-sub" id="pageSub">Personalized for your body & goal</div>
+    </div>
+
+    <div class="hero-card" id="heroCard">
+      <div class="hero-inner">
+        <div class="hero-tag" id="heroTag">—</div>
+        <div class="hero-name" id="heroName">—</div>
+        <div class="hero-desc" id="heroDesc">—</div>
+        <div class="hero-chips" id="heroChips"></div>
+      </div>
+    </div>
+
+    <div class="stats-strip" id="statsStrip">
+      <div class="stat-box">
+        <div class="stat-ico">🔥</div>
+        <div class="stat-val" id="sCalVal">—</div>
+        <div class="stat-lbl">Calories</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-ico">🍽</div>
+        <div class="stat-val" id="sMealsVal">—</div>
+        <div class="stat-lbl">Meals/Day</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-ico">💧</div>
+        <div class="stat-val" id="sWaterVal">—L</div>
+        <div class="stat-lbl">Water</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-ico">⏱</div>
+        <div class="stat-val" id="sWindowVal">—h</div>
+        <div class="stat-lbl">Eat Window</div>
+      </div>
+    </div>
+
+    <div class="macro-card" id="macroCard">
+      <div class="macro-card-title">Macro Breakdown</div>
+      <div class="macro-bars">
+        <div class="macro-bar-row">
+          <div class="mb-label pro">Protein</div>
+          <div class="mb-track">
+            <div class="mb-fill pro" id="barPro"></div>
+          </div>
+          <div class="mb-right">
+            <div class="mb-grams" id="valPro">—g</div>
+            <div class="mb-pct" id="pctPro">—%</div>
+          </div>
+        </div>
+        <div class="macro-bar-row">
+          <div class="mb-label carb">Carbs</div>
+          <div class="mb-track">
+            <div class="mb-fill carb" id="barCarb"></div>
+          </div>
+          <div class="mb-right">
+            <div class="mb-grams" id="valCarb">—g</div>
+            <div class="mb-pct" id="pctCarb">—%</div>
+          </div>
+        </div>
+        <div class="macro-bar-row">
+          <div class="mb-label fat">Fats</div>
+          <div class="mb-track">
+            <div class="mb-fill fat" id="barFat"></div>
+          </div>
+          <div class="mb-right">
+            <div class="mb-grams" id="valFat">—g</div>
+            <div class="mb-pct" id="pctFat">—%</div>
+          </div>
+        </div>
+      </div>
+      <div class="macro-ring-row">
+        <div class="ring-wrap">
+          <svg width="80" height="80" viewBox="0 0 80 80">
+            <circle cx="40" cy="40" r="32" fill="none" stroke="rgba(0,255,247,.06)" stroke-width="10" />
+            <circle id="rPro" cx="40" cy="40" r="32" fill="none" stroke="#00c8f0" stroke-width="10"
+              stroke-linecap="round" stroke-dasharray="201" stroke-dashoffset="201" />
+            <circle id="rCarb" cx="40" cy="40" r="32" fill="none" stroke="#ff8c00" stroke-width="10"
+              stroke-linecap="round" stroke-dasharray="201" stroke-dashoffset="201" />
+            <circle id="rFat" cx="40" cy="40" r="32" fill="none" stroke="#ff3860" stroke-width="10"
+              stroke-linecap="round" stroke-dasharray="201" stroke-dashoffset="201" />
+          </svg>
+          <div class="ring-center">
+            <div class="ring-cal" id="ringCal">—</div>
+            <div class="ring-lbl">kcal</div>
+          </div>
+        </div>
+        <div class="macro-legend">
+          <div class="legend-item">
+            <div class="legend-dot" style="background:#00c8f0;box-shadow:0 0 5px #00c8f0;"></div><span
+              class="legend-key">Protein</span><span class="legend-val" id="lgPro">—g</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot" style="background:#ff8c00;box-shadow:0 0 5px #ff8c00;"></div><span
+              class="legend-key">Carbs</span><span class="legend-val" id="lgCarb">—g</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot" style="background:#ff3860;box-shadow:0 0 5px #ff3860;"></div><span
+              class="legend-key">Fats</span><span class="legend-val" id="lgFat">—g</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="water-card" id="waterCard">
+      <div class="water-head">
+        <div class="water-title">💧 Daily Hydration</div>
+        <div class="water-progress" id="waterProg">0 / 0</div>
+      </div>
+      <div class="water-track">
+        <div class="water-fill" id="waterFill" style="width:0%"></div>
+      </div>
+      <div class="water-cups" id="waterCups"></div>
+    </div>
+
+    <div class="sec">Today's Meals</div>
+    <div class="meal-tabs" id="mealTabs"></div>
+    <div class="meal-list" id="mealList"></div>
+
+    <div class="sec">Nutrition Tip</div>
+    <div class="tip-card" id="tipCard">
+      <div class="tip-lbl">Today's Insight</div>
+      <div class="tip-text" id="tipText">—</div>
+    </div>
+  </main>
+
+  <nav class="bnav">
+    <a href="dashboard.html" class="bn active">
+      <svg viewBox="0 0 24 24">
+        <rect x="3" y="3" width="7" height="7" rx="1" />
+        <rect x="14" y="3" width="7" height="7" rx="1" />
+        <rect x="3" y="14" width="7" height="7" rx="1" />
+        <rect x="14" y="14" width="7" height="7" rx="1" />
+      </svg>
+      <span>Home</span>
+    </a>
+    <a href="exercise.html" class="bn active">
+      <svg viewBox="0 0 24 24">
+        <path d="M6.5 5.5v13M17.5 5.5v13M2 8.5h4M18 8.5h4M2 15.5h4M18 15.5h4M6.5 12h11" />
+      </svg>
+      <span>Workout</span>
+    </a>
+    <a href="diet.html" class="bn active">
+      <svg viewBox="0 0 24 24">
+        <path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2z" />
+        <path d="M12 6v6l4 2" />
+      </svg>
+      <span>Diet</span>
+    </a>
+    <a href="guidelines.html" class="bn active">
+      <svg viewBox="0 0 24 24">
+        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+      </svg>
+      <span>Guide</span>
+    </a>
+  </nav>
+
+  <script>
+    gsap.registerPlugin(ScrollTrigger);
+
+    /* ══════════════════════════════════════
+       COMPLETE DIET DATA
+       All 12 combinations: 3 body types × 4 goals
+    ══════════════════════════════════════ */
+    var PLANS = {
+
+      /* ════════ SKINNY ════════ */
+      'skinny-build': {
+        name: 'Mass Gain Protocol', bodyLabel: 'Skinny Body Type', goal: 'Build Muscle',
+        desc: 'Your primary objective is a caloric surplus. With a fast metabolism, you must eat frequently and prioritize calorie-dense whole foods to build size.',
+        chips: ['🔥 High Surplus', '💪 6 Meals', '⚡ Fast Metabolism'],
+        cal: 2800, meals: 6, water: 10, window: 16,
+        pro: 180, carb: 320, fat: 75,
+        proPct: 26, carbPct: 46, fatPct: 24,
+        tip: 'Never skip meals — your metabolism burns through fuel faster than average. Eat even when not hungry. Calorie-dense foods like oats, rice, nuts, whole milk and avocado are your best friends.',
+        mealTypes: ['Breakfast', 'Snack 1', 'Lunch', 'Snack 2', 'Dinner', 'Pre-Sleep'],
+        meals: {
+          'Breakfast': [
+            { e: '🥣', n: 'Oats with Banana & Peanut Butter', p: '1 cup oats + 1 banana + 2 tbsp PB + whole milk', cal: 520, pro: 18, carb: 72, fat: 16 },
+            { e: '🥛', n: 'Mass Gainer Shake', p: '2 scoops whey + 300ml whole milk + 1 banana', cal: 480, pro: 52, carb: 46, fat: 8 },
+            { e: '🍳', n: '3-Egg Scramble & Toast', p: '3 whole eggs + 2 slices whole grain + butter', cal: 420, pro: 26, carb: 36, fat: 20 }
+          ],
+          'Snack 1': [
+            { e: '🥜', n: 'Mixed Nuts & Dried Fruit', p: '80g mixed nuts + 40g raisins or dates', cal: 500, pro: 12, carb: 44, fat: 30 },
+            { e: '🧀', n: 'Cottage Cheese & Honey', p: '200g full-fat cottage cheese + 1 tbsp honey', cal: 240, pro: 28, carb: 18, fat: 4 },
+            { e: '🍌', n: 'Banana & Almond Butter', p: '2 bananas + 2.5 tbsp almond butter', cal: 380, pro: 9, carb: 54, fat: 16 }
+          ],
+          'Lunch': [
+            { e: '🍚', n: 'Chicken Power Rice Bowl', p: '220g chicken breast + 1.5 cups white rice + veggies', cal: 640, pro: 55, carb: 74, fat: 10 },
+            { e: '🌯', n: 'Beef & Bean Burrito', p: '2 large burritos with beef, beans, cheese, salsa', cal: 700, pro: 46, carb: 80, fat: 18 },
+            { e: '🍝', n: 'Pasta with Chicken & Pesto', p: '250g pasta + 160g chicken breast + pesto', cal: 660, pro: 50, carb: 82, fat: 16 }
+          ],
+          'Snack 2': [
+            { e: '🍞', n: 'Peanut Butter Whole Grain Toast', p: '3 slices bread + 3 tbsp PB + banana slices', cal: 440, pro: 18, carb: 48, fat: 20 },
+            { e: '🍫', n: 'Protein Bar & Whole Milk', p: '1 protein bar (high cal) + 250ml whole milk', cal: 400, pro: 30, carb: 40, fat: 12 },
+            { e: '🥚', n: 'Boiled Eggs & Avocado Toast', p: '3 eggs + ½ avocado + 2 slices bread', cal: 380, pro: 24, carb: 28, fat: 22 }
+          ],
+          'Dinner': [
+            { e: '🥩', n: 'Salmon & Sweet Potato', p: '220g salmon + 1 large sweet potato + broccoli', cal: 600, pro: 50, carb: 54, fat: 20 },
+            { e: '🍗', n: 'Grilled Chicken Thighs & Rice', p: '260g chicken thighs + 1.5 cups rice + salad', cal: 620, pro: 52, carb: 66, fat: 16 },
+            { e: '🥣', n: 'Beef Stir-Fry with Noodles', p: '200g beef strips + 200g egg noodles + mixed veg', cal: 640, pro: 48, carb: 72, fat: 14 }
+          ],
+          'Pre-Sleep': [
+            { e: '🫙', n: 'Casein Protein Shake', p: '1 scoop casein + 250ml whole milk', cal: 300, pro: 34, carb: 22, fat: 6 },
+            { e: '🧀', n: 'Greek Yogurt & Mixed Nuts', p: '200g full-fat Greek yogurt + 30g mixed nuts', cal: 320, pro: 22, carb: 16, fat: 20 },
+            { e: '🥛', n: 'Warm Milk & Oats', p: '300ml whole milk + ½ cup oats + honey', cal: 340, pro: 14, carb: 48, fat: 8 }
+          ]
+        }
+      },
+
+      'skinny-lose': {
+        name: 'Lean Tone Plan', bodyLabel: 'Skinny Body Type', goal: 'Lose Weight',
+        desc: 'A slight caloric deficit while keeping protein very high. Your goal is to shed any excess fat while preserving and even building lean muscle.',
+        chips: ['🎯 Slight Deficit', '💪 High Protein', '🥗 4 Meals'],
+        cal: 1900, meals: 4, water: 8, window: 12,
+        pro: 150, carb: 200, fat: 55,
+        proPct: 31, carbPct: 42, fatPct: 26,
+        tip: 'Even at a deficit, keep protein very high to protect your lean mass. Focus on whole foods, avoid processed snacks, and stay active to maintain your metabolism.',
+        mealTypes: ['Breakfast', 'Lunch', 'Snack', 'Dinner'],
+        meals: {
+          'Breakfast': [
+            { e: '🥚', n: 'Egg White Omelette', p: '4 egg whites + 1 yolk + spinach + feta', cal: 200, pro: 26, carb: 4, fat: 8 },
+            { e: '🥣', n: 'Protein Oats & Berries', p: '½ cup oats + 1 scoop whey + mixed berries', cal: 340, pro: 32, carb: 38, fat: 5 }
+          ],
+          'Lunch': [
+            { e: '🥗', n: 'Grilled Chicken Salad', p: '180g chicken + large mixed salad + light dressing', cal: 380, pro: 44, carb: 16, fat: 10 },
+            { e: '🍱', n: 'Turkey & Quinoa Bowl', p: '180g turkey breast + ½ cup quinoa + roasted veg', cal: 420, pro: 42, carb: 36, fat: 9 }
+          ],
+          'Snack': [
+            { e: '🍎', n: 'Apple & Protein Shake', p: '1 apple + 1 scoop whey + water', cal: 220, pro: 26, carb: 28, fat: 3 },
+            { e: '🥒', n: 'Veggies & Hummus', p: 'Cucumber + carrot sticks + 3 tbsp hummus', cal: 160, pro: 6, carb: 18, fat: 6 }
+          ],
+          'Dinner': [
+            { e: '🐟', n: 'Baked White Fish & Veg', p: '200g cod/tilapia + broccoli + cauliflower + lemon', cal: 320, pro: 44, carb: 10, fat: 8 },
+            { e: '🥩', n: 'Lean Beef & Green Salad', p: '150g extra lean beef + large green salad + olive oil', cal: 360, pro: 40, carb: 8, fat: 14 }
+          ]
+        }
+      },
+
+      'skinny-fit': {
+        name: 'Lean Athletic Plan', bodyLabel: 'Skinny Body Type', goal: 'Stay Fit',
+        desc: 'Balanced nutrition for steady energy, lean muscle maintenance and overall athletic performance. Consistency over perfection.',
+        chips: ['⚖️ Maintenance', '🏃 Performance', '💚 4 Meals'],
+        cal: 2100, meals: 4, water: 8, window: 14,
+        pro: 155, carb: 240, fat: 60,
+        proPct: 30, carbPct: 46, fatPct: 26,
+        tip: 'Consistency is your best tool. Eat the same quality foods every single day. Your fast metabolism is actually an advantage — you can tolerate more carbs than most body types.',
+        mealTypes: ['Breakfast', 'Lunch', 'Snack', 'Dinner'],
+        meals: {
+          'Breakfast': [
+            { e: '🥣', n: 'Oats, Eggs & Fruit', p: '½ cup oats + 2 whole eggs + 1 banana', cal: 420, pro: 26, carb: 52, fat: 12 },
+            { e: '🥞', n: 'Protein Pancakes', p: '3 protein pancakes + Greek yogurt + berries', cal: 380, pro: 32, carb: 44, fat: 8 }
+          ],
+          'Lunch': [
+            { e: '🍚', n: 'Chicken & Brown Rice', p: '180g chicken breast + 1 cup brown rice + greens', cal: 520, pro: 46, carb: 56, fat: 8 },
+            { e: '🌮', n: 'Lean Fish Tacos', p: '2 corn tortillas + 160g grilled fish + salsa + veg', cal: 480, pro: 40, carb: 50, fat: 12 }
+          ],
+          'Snack': [
+            { e: '🍌', n: 'Banana & Peanut Butter', p: '1 banana + 1.5 tbsp natural PB', cal: 250, pro: 7, carb: 34, fat: 10 },
+            { e: '🧀', n: 'Cottage Cheese & Fruit', p: '150g cottage cheese + mixed berries', cal: 180, pro: 20, carb: 18, fat: 3 }
+          ],
+          'Dinner': [
+            { e: '🥩', n: 'Grilled Steak & Veg', p: '180g lean steak + roasted veg + small sweet potato', cal: 520, pro: 48, carb: 40, fat: 14 },
+            { e: '🍗', n: 'Herb Chicken & Quinoa', p: '200g chicken breast + ¾ cup quinoa + salad', cal: 490, pro: 50, carb: 44, fat: 10 }
+          ]
+        }
+      },
+
+      'skinny-endurance': {
+        name: 'Endurance Fuel Plan', bodyLabel: 'Skinny Body Type', goal: 'Improve Endurance',
+        desc: 'High-carbohydrate plan for glycogen loading and sustained energy during long training sessions. Your fast metabolism makes this plan ideal.',
+        chips: ['⚡ High Carb', '🏃 Glycogen Focus', '💧 High Water'],
+        cal: 2200, meals: 5, water: 10, window: 14,
+        pro: 145, carb: 290, fat: 55,
+        proPct: 26, carbPct: 53, fatPct: 22,
+        tip: 'Fuel your sessions 2 hours before training with complex carbs. After sessions over 60 minutes, eat fast carbs + protein within 30 minutes to maximize recovery.',
+        mealTypes: ['Breakfast', 'Snack 1', 'Lunch', 'Snack 2', 'Dinner'],
+        meals: {
+          'Breakfast': [{ e: '🥣', n: 'Carb Power Oat Bowl', p: '1 cup oats + 1 banana + honey + 250ml milk', cal: 480, pro: 18, carb: 84, fat: 8 }],
+          'Snack 1': [{ e: '🍌', n: 'Banana & Energy Bar', p: '2 bananas + 1 oat-based energy bar', cal: 320, pro: 6, carb: 68, fat: 4 }],
+          'Lunch': [{ e: '🍝', n: 'Pasta & Chicken', p: '200g pasta + 150g chicken + tomato sauce + veg', cal: 580, pro: 44, carb: 80, fat: 10 }],
+          'Snack 2': [{ e: '🍞', n: 'Whole Grain Toast & PB', p: '2 slices wholegrain + 2 tbsp PB', cal: 280, pro: 10, carb: 32, fat: 14 }],
+          'Dinner': [{ e: '🍚', n: 'Rice Bowl with Salmon', p: '1.5 cups rice + 180g salmon + steamed greens', cal: 560, pro: 46, carb: 62, fat: 14 }]
+        }
+      },
+
+      /* ════════ AVERAGE ════════ */
+      'average-build': {
+        name: 'Hypertrophy Program', bodyLabel: 'Average Build', goal: 'Build Muscle',
+        desc: 'Clean caloric surplus optimized for muscle protein synthesis. Enough calories to grow, clean enough to stay lean while gaining.',
+        chips: ['📈 Clean Surplus', '💪 5 Meals', '🔬 Hypertrophy'],
+        cal: 2600, meals: 5, water: 9, window: 14,
+        pro: 175, carb: 280, fat: 70,
+        proPct: 27, carbPct: 43, fatPct: 24,
+        tip: 'Progressive overload + adequate protein = muscle growth. Being too conservative with calories is the #1 reason people fail to build muscle. Eat to grow, train to grow.',
+        mealTypes: ['Breakfast', 'Snack', 'Lunch', 'Post-Workout', 'Dinner'],
+        meals: {
+          'Breakfast': [
+            { e: '🥚', n: 'Eggs, Toast & Avocado', p: '3 whole eggs + 2 slices toast + ½ avocado', cal: 490, pro: 28, carb: 34, fat: 26 },
+            { e: '🥣', n: 'Protein Oats & Berries', p: '¾ cup oats + 1.5 scoops whey + mixed berries', cal: 440, pro: 38, carb: 52, fat: 6 }
+          ],
+          'Snack': [
+            { e: '🍎', n: 'Apple & Protein Bar', p: '1 apple + 1 high-protein bar', cal: 280, pro: 22, carb: 36, fat: 6 },
+            { e: '🥛', n: 'Protein Shake & Almonds', p: '1 scoop whey + 250ml milk + 20g almonds', cal: 280, pro: 30, carb: 16, fat: 12 }
+          ],
+          'Lunch': [
+            { e: '🍚', n: 'Chicken & Rice Power Bowl', p: '200g chicken breast + 1.5 cups rice + broccoli', cal: 630, pro: 56, carb: 72, fat: 8 },
+            { e: '🌯', n: 'Tuna Whole Wheat Wrap', p: '2 wraps + tuna + veggies + light mayo', cal: 560, pro: 48, carb: 62, fat: 10 }
+          ],
+          'Post-Workout': [
+            { e: '🥛', n: 'Whey & Banana', p: '1.5 scoops whey + 1 banana + 200ml water', cal: 320, pro: 42, carb: 34, fat: 3 },
+            { e: '🍞', n: 'PB & Jam on Whole Grain', p: '2 slices + 2 tbsp PB + jam', cal: 380, pro: 14, carb: 48, fat: 16 }
+          ],
+          'Dinner': [
+            { e: '🥩', n: 'Steak, Potato & Greens', p: '200g lean steak + baked potato + steamed greens', cal: 580, pro: 54, carb: 48, fat: 16 },
+            { e: '🍗', n: 'Grilled Chicken Pasta', p: '180g chicken breast + 150g pasta + tomato sauce', cal: 560, pro: 52, carb: 60, fat: 9 }
+          ]
+        }
+      },
+
+      'average-lose': {
+        name: 'Cut & Define Plan', bodyLabel: 'Average Build', goal: 'Lose Weight',
+        desc: 'Controlled caloric deficit with high protein to preserve lean muscle while shedding body fat. Structured and sustainable.',
+        chips: ['📉 300-500 Deficit', '💪 High Protein', '🎯 4 Meals'],
+        cal: 1900, meals: 4, water: 8, window: 12,
+        pro: 165, carb: 180, fat: 55,
+        proPct: 35, carbPct: 38, fatPct: 26,
+        tip: 'A 300–500 kcal daily deficit is the sweet spot for cutting. More than that risks muscle loss. Keep lifting heavy — this signals your body to preserve muscle while burning fat.',
+        mealTypes: ['Breakfast', 'Lunch', 'Snack', 'Dinner'],
+        meals: {
+          'Breakfast': [
+            { e: '🥚', n: 'Egg White Omelette & Spinach', p: '5 egg whites + 1 yolk + spinach + feta', cal: 240, pro: 32, carb: 6, fat: 8 },
+            { e: '🥣', n: 'High Protein Oats', p: '½ cup oats + 1.5 scoops whey + berries', cal: 340, pro: 38, carb: 34, fat: 5 }
+          ],
+          'Lunch': [
+            { e: '🥗', n: 'Chicken Caesar Salad', p: '200g grilled chicken + romaine + parmesan + light dressing', cal: 380, pro: 48, carb: 10, fat: 14 },
+            { e: '🍱', n: 'Turkey Meal Prep Bowl', p: '180g turkey breast + cauliflower rice + roasted veg', cal: 340, pro: 44, carb: 12, fat: 8 }
+          ],
+          'Snack': [
+            { e: '🫙', n: 'Greek Yogurt & Berries', p: '200g 0% Greek yogurt + mixed berries', cal: 180, pro: 22, carb: 20, fat: 0 },
+            { e: '🥛', n: 'Protein Shake', p: '1.5 scoops whey + 300ml water', cal: 180, pro: 36, carb: 4, fat: 2 }
+          ],
+          'Dinner': [
+            { e: '🐟', n: 'Baked Salmon & Asparagus', p: '200g salmon + asparagus + lemon + herbs', cal: 380, pro: 48, carb: 6, fat: 18 },
+            { e: '🥩', n: 'Lean Beef & Roasted Veg', p: '180g lean mince + mixed roasted vegetables', cal: 360, pro: 44, carb: 14, fat: 12 }
+          ]
+        }
+      },
+
+      'average-fit': {
+        name: 'Balanced Performance', bodyLabel: 'Average Build', goal: 'Stay Fit',
+        desc: 'Maintenance calories with balanced macros for sustained energy, healthy performance and body composition maintenance.',
+        chips: ['⚖️ Maintenance', '🏃 Performance', '✅ 4 Meals'],
+        cal: 2100, meals: 4, water: 8, window: 14,
+        pro: 160, carb: 230, fat: 62,
+        proPct: 31, carbPct: 44, fatPct: 27,
+        tip: 'Consistency over perfection. Hit your protein target every single day and eat whole foods 80% of the time. The 20% flexibility keeps the plan sustainable long-term.',
+        mealTypes: ['Breakfast', 'Lunch', 'Snack', 'Dinner'],
+        meals: {
+          'Breakfast': [
+            { e: '🥞', n: 'Protein Pancakes & Fruit', p: '3 pancakes + Greek yogurt + mixed berries', cal: 420, pro: 34, carb: 46, fat: 8 },
+            { e: '🥚', n: 'Eggs & Whole Grain Toast', p: '3 eggs + 2 slices toast + 1 tbsp olive oil', cal: 380, pro: 26, carb: 30, fat: 18 }
+          ],
+          'Lunch': [
+            { e: '🌮', n: 'Chicken Tacos', p: '3 corn tacos + 160g chicken + salsa + veg', cal: 520, pro: 44, carb: 52, fat: 12 },
+            { e: '🍱', n: 'Balanced Bento Bowl', p: '150g protein + ¾ cup brown rice + varied veg', cal: 480, pro: 40, carb: 52, fat: 10 }
+          ],
+          'Snack': [
+            { e: '🍌', n: 'Banana & Mixed Nuts', p: '1 banana + 25g mixed nuts', cal: 220, pro: 5, carb: 30, fat: 12 },
+            { e: '🧀', n: 'Cottage Cheese & Crackers', p: '150g cottage cheese + 5 whole grain crackers', cal: 200, pro: 20, carb: 18, fat: 4 }
+          ],
+          'Dinner': [
+            { e: '🥩', n: 'Mixed Grill & Quinoa', p: '180g mixed protein + ¾ cup quinoa + salad', cal: 520, pro: 48, carb: 44, fat: 14 },
+            { e: '🍗', n: 'Herb Chicken & Sweet Potato', p: '200g chicken + 1 sweet potato + roasted veg', cal: 500, pro: 46, carb: 46, fat: 10 }
+          ]
+        }
+      },
+
+      'average-endurance': {
+        name: 'Stamina Builder', bodyLabel: 'Average Build', goal: 'Improve Endurance',
+        desc: 'High-carbohydrate endurance plan for glycogen loading, sustained performance and fast recovery between sessions.',
+        chips: ['⚡ High Carb', '🏃 Endurance', '💧 High Water'],
+        cal: 2250, meals: 5, water: 10, window: 14,
+        pro: 150, carb: 300, fat: 58,
+        proPct: 27, carbPct: 53, fatPct: 23,
+        tip: 'Carb-load the night before long sessions. During workouts over 90 minutes, aim for 30–60g of fast carbs per hour via sports drinks or fruit to maintain performance.',
+        mealTypes: ['Breakfast', 'Snack 1', 'Lunch', 'Snack 2', 'Dinner'],
+        meals: {
+          'Breakfast': [{ e: '🥣', n: 'Power Oat Bowl', p: '1 cup oats + 2 eggs + 1 banana + honey', cal: 520, pro: 26, carb: 84, fat: 10 }],
+          'Snack 1': [{ e: '🍌', n: 'Pre-Training Fuel', p: '2 bananas + 250ml sports drink', cal: 280, pro: 4, carb: 66, fat: 1 }],
+          'Lunch': [{ e: '🍝', n: 'Pasta Power Bowl', p: '250g pasta + 150g tuna + cherry tomatoes + olive oil', cal: 580, pro: 42, carb: 80, fat: 12 }],
+          'Snack 2': [{ e: '🍞', n: 'Recovery Snack', p: '2 slices bread + 1 banana + PB', cal: 340, pro: 10, carb: 52, fat: 12 }],
+          'Dinner': [{ e: '🍚', n: 'Rice & Lean Protein', p: '1.5 cups rice + 180g chicken/fish + steamed veg', cal: 530, pro: 46, carb: 62, fat: 8 }]
+        }
+      },
+
+      /* ════════ MUSCULAR ════════ */
+      'muscular-build': {
+        name: 'Advanced Strength Plan', bodyLabel: 'Muscular Build', goal: 'Build Muscle',
+        desc: 'Progressive overload nutrition for serious athletes. High protein, strategic carbs and performance fats for maximum muscle protein synthesis.',
+        chips: ['🏋️ Advanced', '💪 5 Meals', '📈 Carb Cycle'],
+        cal: 3000, meals: 5, water: 10, window: 15,
+        pro: 210, carb: 310, fat: 80,
+        proPct: 28, carbPct: 41, fatPct: 24,
+        tip: 'At your level, carb cycling unlocks the next stage: higher carbs on heavy lifting days, moderate on rest days. Track your strength progression weekly — that\'s your real feedback.',
+        mealTypes: ['Breakfast', 'Snack', 'Lunch', 'Post-Workout', 'Dinner'],
+        meals: {
+          'Breakfast': [
+            { e: '🥚', n: '6-Egg Power Breakfast', p: '6 whole eggs + 2 slices toast + ½ avocado + juice', cal: 680, pro: 48, carb: 42, fat: 36 },
+            { e: '🥣', n: 'Mass Oat Stack', p: '1.5 cups oats + 2 scoops whey + banana + nuts', cal: 720, pro: 58, carb: 86, fat: 16 }
+          ],
+          'Snack': [
+            { e: '🥛', n: 'Mass Shake', p: '2 scoops whey + 300ml whole milk + oats blend', cal: 540, pro: 54, carb: 56, fat: 10 },
+            { e: '🥜', n: 'Nuts & Protein Bar', p: '40g mixed nuts + 1 premium protein bar', cal: 420, pro: 24, carb: 28, fat: 24 }
+          ],
+          'Lunch': [
+            { e: '🥩', n: 'Steak & Rice Power Meal', p: '250g ribeye + 2 cups rice + steamed greens', cal: 800, pro: 65, carb: 84, fat: 22 },
+            { e: '🍗', n: 'Chicken Breast Platter', p: '300g chicken breast + sweet potato + broccoli', cal: 720, pro: 68, carb: 68, fat: 12 }
+          ],
+          'Post-Workout': [
+            { e: '🥛', n: 'Anabolic Window Shake', p: '2 scoops whey + 2 bananas + 250ml milk', cal: 500, pro: 54, carb: 58, fat: 6 },
+            { e: '🍞', n: 'Rice Cakes & Shake', p: '6 rice cakes + 1.5 scoops whey', cal: 400, pro: 42, carb: 54, fat: 3 }
+          ],
+          'Dinner': [
+            { e: '🐟', n: 'Salmon Power Plate', p: '250g salmon + 1.5 cups rice + asparagus', cal: 700, pro: 62, carb: 64, fat: 22 },
+            { e: '🥩', n: 'Beef & Baked Potato', p: '250g lean beef + large baked potato + salad', cal: 720, pro: 60, carb: 68, fat: 18 }
+          ]
+        }
+      },
+
+      'muscular-lose': {
+        name: 'Shred & Maintain', bodyLabel: 'Muscular Build', goal: 'Lose Weight',
+        desc: 'Aggressive cutting protocol for serious athletes. Very high protein preserves every gram of hard-earned muscle during the cut.',
+        chips: ['🔥 Aggressive Cut', '💪 Very High Protein', '⚡ 5 Meals'],
+        cal: 2200, meals: 5, water: 10, window: 12,
+        pro: 200, carb: 180, fat: 60,
+        proPct: 36, carbPct: 33, fatPct: 24,
+        tip: 'Keep lifting heavy while cutting — don\'t reduce intensity. This is the signal that tells your body to keep the muscle. Use cardio as your calorie-burning tool, not extreme food restriction.',
+        mealTypes: ['Breakfast', 'Snack 1', 'Lunch', 'Snack 2', 'Dinner'],
+        meals: {
+          'Breakfast': [
+            { e: '🥚', n: 'Egg White Power Bowl', p: '6 egg whites + 1 yolk + spinach + ½ cup oats', cal: 380, pro: 44, carb: 28, fat: 8 },
+            { e: '🥣', n: 'Lean Protein Oats', p: '½ cup oats + 2 scoops whey + berries', cal: 360, pro: 48, carb: 34, fat: 4 }
+          ],
+          'Snack 1': [
+            { e: '🫙', n: 'Greek Yogurt & Walnuts', p: '200g 0% Greek yogurt + 15g walnuts', cal: 220, pro: 26, carb: 14, fat: 8 },
+            { e: '🥛', n: 'Protein Shake', p: '1.5 scoops whey + water', cal: 190, pro: 38, carb: 4, fat: 3 }
+          ],
+          'Lunch': [
+            { e: '🥗', n: 'High Protein Chicken Salad', p: '250g chicken breast + large salad + olive oil dressing', cal: 460, pro: 56, carb: 12, fat: 18 },
+            { e: '🍱', n: 'Shred Meal Prep Bowl', p: '220g turkey breast + cauliflower rice + broccoli', cal: 380, pro: 50, carb: 14, fat: 8 }
+          ],
+          'Snack 2': [
+            { e: '🍎', n: 'Apple & Protein Shake', p: '1 apple + 1 scoop whey', cal: 220, pro: 26, carb: 26, fat: 3 },
+            { e: '🥚', n: 'Boiled Eggs', p: '3 boiled eggs + mustard + cucumber', cal: 220, pro: 18, carb: 4, fat: 14 }
+          ],
+          'Dinner': [
+            { e: '🐟', n: 'White Fish & Greens', p: '260g cod/tilapia + asparagus + large salad', cal: 320, pro: 54, carb: 8, fat: 8 },
+            { e: '🥩', n: 'Lean Beef Stir-Fry', p: '200g lean beef strips + mixed veg + minimal oil', cal: 400, pro: 48, carb: 16, fat: 14 }
+          ]
+        }
+      },
+
+      'muscular-fit': {
+        name: 'Athletic Maintenance', bodyLabel: 'Muscular Build', goal: 'Stay Fit',
+        desc: 'Performance nutrition for serious athletes maintaining peak condition. High protein, quality carbs and anti-inflammatory fats.',
+        chips: ['⚡ Performance', '💚 Maintenance', '🏆 5 Meals'],
+        cal: 2400, meals: 5, water: 9, window: 14,
+        pro: 190, carb: 250, fat: 70,
+        proPct: 32, carbPct: 42, fatPct: 26,
+        tip: 'At your level, food quality matters more than quantity. Eliminate ultra-processed foods and alcohol entirely — they silently destroy performance, recovery and sleep quality.',
+        mealTypes: ['Breakfast', 'Snack', 'Lunch', 'Post-Workout', 'Dinner'],
+        meals: {
+          'Breakfast': [
+            { e: '🥚', n: 'Athlete\'s Power Breakfast', p: '4 eggs + 2 slices whole grain + ½ avocado', cal: 520, pro: 36, carb: 30, fat: 28 },
+            { e: '🥣', n: 'Performance Oat Bowl', p: '1 cup oats + 1.5 scoops whey + banana', cal: 500, pro: 42, carb: 62, fat: 8 }
+          ],
+          'Snack': [
+            { e: '🥜', n: 'Almonds & Protein Bar', p: '25g almonds + 1 quality protein bar', cal: 320, pro: 24, carb: 24, fat: 14 }
+          ],
+          'Lunch': [
+            { e: '🍚', n: 'Performance Rice Bowl', p: '200g chicken/beef + 1.5 cups brown rice + veg', cal: 600, pro: 52, carb: 66, fat: 10 },
+            { e: '🌯', n: 'Protein Power Wrap', p: '2 wraps + 200g chicken + hummus + veg', cal: 560, pro: 48, carb: 56, fat: 14 }
+          ],
+          'Post-Workout': [
+            { e: '🥛', n: 'Recovery Shake', p: '1.5 scoops whey + banana + 200ml milk', cal: 340, pro: 44, carb: 36, fat: 5 }
+          ],
+          'Dinner': [
+            { e: '🥩', n: 'Grilled Steak & Sides', p: '220g lean steak + sweet potato + broccoli', cal: 580, pro: 54, carb: 46, fat: 16 },
+            { e: '🍗', n: 'Herb-Baked Chicken', p: '220g chicken breast + basmati rice + salad', cal: 540, pro: 52, carb: 50, fat: 10 }
+          ]
+        }
+      },
+
+      'muscular-endurance': {
+        name: 'Power Endurance Plan', bodyLabel: 'Muscular Build', goal: 'Improve Endurance',
+        desc: 'High protein + high carb for serious athletes who need both power and endurance. Anti-inflammatory foods are a priority.',
+        chips: ['⚡ Power + Endurance', '🐟 Anti-Inflammatory', '💧 Max Hydration'],
+        cal: 2800, meals: 5, water: 12, window: 15,
+        pro: 185, carb: 300, fat: 65,
+        proPct: 26, carbPct: 43, fatPct: 21,
+        tip: 'Omega-3 rich foods (salmon, walnuts, flaxseed) significantly reduce inflammation and speed recovery. At your training volume, recovery nutrition is as important as the training itself.',
+        mealTypes: ['Breakfast', 'Snack 1', 'Lunch', 'Post-Workout', 'Dinner'],
+        meals: {
+          'Breakfast': [{ e: '🥣', n: 'Endurance Oat Stack', p: '1.5 cups oats + 2 scoops whey + 2 bananas + honey', cal: 700, pro: 54, carb: 100, fat: 10 }],
+          'Snack 1': [{ e: '🍌', n: 'Quick Glycogen Fuel', p: '3 bananas + 20g honey', cal: 340, pro: 4, carb: 84, fat: 1 }],
+          'Lunch': [{ e: '🍝', n: 'Carb-Loading Pasta', p: '300g pasta + 200g chicken breast + olive oil + herbs', cal: 740, pro: 54, carb: 92, fat: 18 }],
+          'Post-Workout': [{ e: '🥛', n: 'Power Recovery Shake', p: '2 scoops whey + banana + oats + milk', cal: 480, pro: 50, carb: 62, fat: 8 }],
+          'Dinner': [{ e: '🐟', n: 'Salmon & Power Grains', p: '250g salmon + 1.5 cups quinoa + steamed veg', cal: 700, pro: 58, carb: 66, fat: 24 }]
+        }
+      }
+    };
+
+    /* ══════════ TIPS ══════════ */
+    var TIPS = [
+      'Sunday is perfect for meal prep. Preparing 5 days of food removes daily decision fatigue and keeps your nutrition locked in.',
+      'Start every morning with 500ml of water before eating. It kickstarts metabolism and improves nutrient absorption throughout the day.',
+      'Eat your largest meal within 2 hours of your heaviest workout — this is when your body is most primed to absorb and use nutrients.',
+      'Eat 5 differently coloured vegetables every day. Colour variety equals micronutrient variety. Your performance depends on these.',
+      'Spread protein across every meal, not just dinner. 4–6 smaller protein doses optimize muscle protein synthesis over 24 hours.',
+      'Don\'t fear healthy fats. Avocado, olive oil, nuts and fatty fish support hormone production including testosterone and growth hormone.',
+      'If you\'re having a social day, eat your regular meals first. Then enjoy your treat. Never arrive at a social event hungry.'
+    ];
+
+    /* ══════════ STATE ══════════ */
+    var bodyType = localStorage.getItem('ip_body') || 'average';
+    var goal = localStorage.getItem('ip_goal') || 'fit';
+    var key = bodyType + '-' + goal;
+    var plan = PLANS[key] || PLANS['average-fit'];
+    var activeMeal = plan.mealTypes[0];
+    var eaten = {};
+    var wCount = 0;
+
+    const SUPABASE_URL = 'https://vwqogdtowvfdqiknkmvg.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ3cW9nZHRvd3ZmZHFpa25rbXZnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkxMTY2NTEsImV4cCI6MjA5NDY5MjY1MX0.ZiVg002fi-nn8ae7qWAEmHaPWejRhRdPIsJ7NfI9rfE';
+
+    /* ══════════ INIT ══════════ */
+    document.addEventListener('DOMContentLoaded', async function () {
+      try {
+        const { createClient } = await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm');
+        const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user) {
+          const { data: profile } = await supabase.from('profiles').select('body_type, goal').eq('id', user.id).single();
+          if (profile) {
+            if (profile.body_type) bodyType = profile.body_type;
+            if (profile.goal) goal = profile.goal;
+            localStorage.setItem('ip_body', bodyType);
+            localStorage.setItem('ip_goal', goal);
+            plan = PLANS[bodyType + '-' + goal] || PLANS['average-fit'];
+            activeMeal = plan.mealTypes[0];
+          }
+        }
+      } catch (err) { console.log(err); }
+
+      buildHeader();
+      buildHero();
+      buildStats();
+      buildMacros();
+      buildWater();
+      buildMealTabs();
+      renderMeals();
+      buildTip();
+      runAnimations();
+    });
+
+    function buildHeader() {
+      document.getElementById('pageSub').textContent = plan.name + ' · ' + plan.goal;
+    }
+
+    /* ── HERO ── */
+    function buildHero() {
+      var el = document.getElementById('heroCard');
+      el.className = 'hero-card plan-' + bodyType;
+      document.getElementById('heroTag').textContent = plan.bodyLabel;
+      document.getElementById('heroName').textContent = plan.name;
+      document.getElementById('heroDesc').textContent = plan.desc;
+      var chips = plan.chips.map(function (c) {
+        return '<span class="hero-chip">' + c + '</span>';
+      }).join('');
+      document.getElementById('heroChips').innerHTML = chips;
+    }
+
+    /* ── STATS ── */
+    function buildStats() {
+      document.getElementById('sCalVal').textContent = plan.cal;
+      document.getElementById('sMealsVal').textContent = plan.meals;
+      document.getElementById('sWaterVal').textContent = (plan.water * .25).toFixed(1) + 'L';
+      document.getElementById('sWindowVal').textContent = plan.window + 'h';
+    }
+
+    /* ── MACROS ── */
+    function buildMacros() {
+      document.getElementById('valPro').textContent = plan.pro + 'g';
+      document.getElementById('pctPro').textContent = plan.proPct + '%';
+      document.getElementById('valCarb').textContent = plan.carb + 'g';
+      document.getElementById('pctCarb').textContent = plan.carbPct + '%';
+      document.getElementById('valFat').textContent = plan.fat + 'g';
+      document.getElementById('pctFat').textContent = plan.fatPct + '%';
+      document.getElementById('ringCal').textContent = plan.cal;
+      document.getElementById('lgPro').textContent = plan.pro + 'g';
+      document.getElementById('lgCarb').textContent = plan.carb + 'g';
+      document.getElementById('lgFat').textContent = plan.fat + 'g';
+
+      /* Animate bars after delay */
+      setTimeout(function () {
+        document.getElementById('barPro').style.width = plan.proPct + '%';
+        document.getElementById('barCarb').style.width = plan.carbPct + '%';
+        document.getElementById('barFat').style.width = plan.fatPct + '%';
+
+        /* Donut ring segments */
+        var circ = 201;
+        var proOff = circ * (1 - plan.proPct / 100);
+        var carbOff = circ * (1 - plan.carbPct / 100);
+        var fatOff = circ * (1 - plan.fatPct / 100);
+
+        var rPro = document.getElementById('rPro');
+        var rCarb = document.getElementById('rCarb');
+        var rFat = document.getElementById('rFat');
+
+        /* Protein arc */
+        rPro.style.strokeDashoffset = proOff;
+
+        /* Carb arc — offset by protein */
+        var carbStart = plan.proPct / 100 * circ;
+        rCarb.style.strokeDasharray = (plan.carbPct / 100 * circ) + ' ' + circ;
+        rCarb.style.strokeDashoffset = -carbStart;
+
+        /* Fat arc — offset by protein+carb */
+        var fatStart = (plan.proPct + plan.carbPct) / 100 * circ;
+        rFat.style.strokeDasharray = (plan.fatPct / 100 * circ) + ' ' + circ;
+        rFat.style.strokeDashoffset = -fatStart;
+      }, 800);
+    }
+
+    /* ── WATER ── */
+    function buildWater() {
+      var t = plan.water;
+      var html = '';
+      for (var i = 0; i < t; i++) html += '<div class="wcup" id="wc' + i + '" onclick="tapWater(' + i + ')">💧</div>';
+      document.getElementById('waterCups').innerHTML = html;
+      updateWaterUI();
+    }
+
+    function tapWater(i) {
+      var cup = document.getElementById('wc' + i);
+      if (cup.classList.contains('full')) { cup.classList.remove('full'); wCount--; }
+      else { cup.classList.add('full'); wCount++; gsap.fromTo(cup, { scale: .6 }, { scale: 1, duration: .35, ease: 'back.out(2)' }); }
+      updateWaterUI();
+    }
+
+    function updateWaterUI() {
+      var t = plan.water;
+      document.getElementById('waterProg').textContent = wCount + ' / ' + t + ' glasses';
+      document.getElementById('waterFill').style.width = (wCount / t * 100) + '%';
+    }
+
+    /* ── MEAL TABS ── */
+    function buildMealTabs() {
+      var icons = { 'Breakfast': '🌅', 'Snack 1': '🍏', 'Snack 2': '🍎', 'Snack': '🍎', 'Lunch': '☀️', 'Post-Workout': '⚡', 'Pre-Sleep': '🌙', 'Dinner': '🌙' };
+      var html = plan.mealTypes.map(function (m) {
+        return '<div class="mtab' + (m === activeMeal ? ' active' : '') + '" onclick="switchMeal(\'' + m + '\')">' +
+          (icons[m] || '🥗') + ' ' + m + '</div>';
+      }).join('');
+      document.getElementById('mealTabs').innerHTML = html;
+    }
+
+    function switchMeal(m) {
+      activeMeal = m;
+      buildMealTabs();
+      renderMeals();
+    }
+
+    /* ── MEALS ── */
+    function renderMeals() {
+      var meals = plan.meals[activeMeal] || [];
+      var html = '';
+      meals.forEach(function (m, i) {
+        var k = activeMeal + '_' + i;
+        var isEaten = eaten[k];
+        var barW = Math.round((m.pro * 4 + m.carb * 4 + m.fat * 9) / m.cal * 100);
+        html +=
+          '<div class="meal-card' + (isEaten ? ' eaten' : '') + '" id="mc' + i + '">' +
+          '<div class="meal-top">' +
+          '<div class="meal-emoji-wrap">' + m.e + '</div>' +
+          '<div class="meal-info">' +
+          '<div class="meal-name">' + m.n + '</div>' +
+          '<div class="meal-portion">' + m.p + '</div>' +
+          '<div class="meal-macros">' +
+          '<span class="mmtag mmt-cal">🔥 ' + m.cal + ' kcal</span>' +
+          '<span class="mmtag mmt-p">P ' + m.pro + 'g</span>' +
+          '<span class="mmtag mmt-c">C ' + m.carb + 'g</span>' +
+          '<span class="mmtag mmt-f">F ' + m.fat + 'g</span>' +
+          '</div></div>' +
+          '<button class="eat-btn" onclick="toggleEat(\'' + k + '\',' + i + ')">' + (isEaten ? '✓' : '○') + '</button>' +
+          '</div>' +
+          '<div class="meal-bar-wrap">' +
+          '<div class="meal-bar" style="width:' + barW + '%;background:linear-gradient(90deg,' + (isEaten ? '#00aa55,#00ff88' : '#004eff,#00c8f0') + ');"></div>' +
+          '</div>' +
+          '</div>';
+      });
+      document.getElementById('mealList').innerHTML = html;
+
+      /* Animate in */
+      gsap.utils.toArray('.meal-card').forEach(function (c, i) {
+        gsap.to(c, { opacity: 1, y: 0, duration: .42, delay: i * .07, ease: 'power3.out' });
+      });
+    }
+
+    function toggleEat(k, i) {
+      eaten[k] = !eaten[k];
+      renderMeals();
+      if (eaten[k]) gsap.fromTo('#mc' + i, { scale: .97 }, { scale: 1, duration: .3, ease: 'back.out(1.7)' });
+    }
+
+    /* ── TIP ── */
+    function buildTip() {
+      document.getElementById('tipText').textContent = TIPS[new Date().getDay()];
+    }
+
+    /* ══════════ GSAP ══════════ */
+    function runAnimations() {
+      var tl = gsap.timeline();
+      tl.to('#pageHead', { opacity: 1, y: 0, duration: .6, ease: 'power3.out' })
+        .to('#heroCard', { opacity: 1, duration: .5, ease: 'power2.out' }, '-=.3')
+        .to('#statsStrip', { opacity: 1, duration: .45, ease: 'power2.out' }, '-=.2')
+        .to('#macroCard', { opacity: 1, duration: .45, ease: 'power2.out' }, '-=.15')
+        .to('#waterCard', { opacity: 1, duration: .45, ease: 'power2.out' }, '-=.1');
+
+      gsap.to('#tipCard', {
+        opacity: 1, duration: .5, ease: 'power2.out',
+        scrollTrigger: { trigger: '#tipCard', start: 'top 90%' }
+      });
+    }
+  </script>
+</body>
+
+</html>

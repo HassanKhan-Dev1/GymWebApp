@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IronPulse — Guidelines</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;600;700&display=swap"
+    rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <style>
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg: #03070d;
+      --card: #080f1a;
+      --card2: #0a1525;
+      --card3: #0d1d35;
+      --cyan: #00fff7;
+      --cyan2: #00c8f0;
+      --blue: #004eff;
+      --green: #00ff88;
+      --orange: #ff8c00;
+      --red: #ff3860;
+      --yellow: #ffd600;
+      --text: #cce8f4;
+      --muted: #c9eeff;
+      --border: rgba(0, 255, 247, 0.1);
+      --borderH: rgba(0, 255, 247, 0.45);
+    }
+
+    html,
+    body {
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Rajdhani', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* BG */
+    .bg-grid {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background-image: linear-gradient(rgba(0, 255, 247, .025) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 255, 247, .025) 1px, transparent 1px);
+      background-size: 50px 50px;
+    }
+
+    .bg-glow {
+      position: fixed;
+      top: -20vh;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100vw;
+      height: 55vh;
+      background: radial-gradient(ellipse, rgba(0, 78, 255, .12) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* NAVBAR */
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(3, 7, 13, .92);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 1.3rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 58px;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      text-decoration: none;
+    }
+
+    .nav-ico {
+      width: 32px;
+      height: 32px;
+      border-radius: 9px;
+      background: linear-gradient(145deg, #00c8f0, #004eff);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 14px rgba(0, 200, 240, .4);
+    }
+
+    .nav-ico svg {
+      width: 17px;
+      height: 17px;
+      stroke: #fff;
+      fill: none;
+      stroke-width: 2.3;
+      stroke-linecap: round;
+    }
+
+    .nav-brand {
+      font-family: 'Orbitron', monospace;
+      font-size: .85rem;
+      font-weight: 900;
+      letter-spacing: 3px;
+      background: linear-gradient(90deg, var(--cyan), #fff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .nav-back {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: .7rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color .2s;
+    }
+
+    .nav-back:hover {
+      color: var(--cyan);
+    }
+
+    .nav-back svg {
+      width: 16px;
+      height: 16px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+    }
+
+    /* MAIN */
+    .main {
+      position: relative;
+      z-index: 1;
+      padding: 1.3rem 1.1rem 5.5rem;
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    /* PAGE HEADER */
+    .page-head {
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      transform: translateY(-18px);
+    }
+
+    .page-tag {
+      font-size: .6rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--cyan2);
+      margin-bottom: .3rem;
+    }
+
+    .page-title {
+      font-family: 'Orbitron', monospace;
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: #fff;
+      margin-bottom: .25rem;
+    }
+
+    .page-sub {
+      font-size: .85rem;
+      color: var(--muted);
+    }
+
+    /* QUICK NAV PILLS */
+    .quick-nav {
+      display: flex;
+      gap: .4rem;
+      overflow-x: auto;
+      padding-bottom: .3rem;
+      margin-bottom: 1.4rem;
+      scrollbar-width: none;
+      opacity: 0;
+    }
+
+    .quick-nav::-webkit-scrollbar {
+      display: none;
+    }
+
+    .qpill {
+      padding: .45rem 1rem;
+      border-radius: 20px;
+      cursor: pointer;
+      white-space: nowrap;
+      flex-shrink: 0;
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--muted);
+      text-decoration: none;
+      transition: all .22s;
+      display: block;
+    }
+
+    .qpill:hover {
+      border-color: var(--borderH);
+      color: var(--text);
+    }
+
+    .qpill.active {
+      background: linear-gradient(135deg, var(--blue), var(--cyan2));
+      color: #fff;
+      border-color: transparent;
+      box-shadow: 0 0 14px rgba(0, 200, 240, .25);
+    }
+
+    /* SECTION LABEL */
+    .sec {
+      font-size: .62rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin: 1.4rem 0 .8rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+    }
+
+    .sec::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, var(--border), transparent);
+    }
+
+    /* ═══ HERO RULE BANNER ═══ */
+    .hero-banner {
+      background: linear-gradient(135deg, rgba(0, 78, 255, .22), rgba(0, 200, 240, .07));
+      border: 1px solid rgba(0, 200, 240, .22);
+      border-radius: 22px;
+      padding: 1.5rem 1.5rem;
+      margin-bottom: 1rem;
+      position: relative;
+      overflow: hidden;
+      opacity: 0;
+    }
+
+    .hero-banner::before {
+      content: '';
+      position: absolute;
+      top: -50px;
+      right: -40px;
+      width: 200px;
+      height: 200px;
+      background: radial-gradient(circle, rgba(0, 200, 240, .1), transparent 70%);
+      pointer-events: none;
+    }
+
+    .hb-number {
+      font-family: 'Orbitron', monospace;
+      font-size: 4rem;
+      font-weight: 900;
+      color: rgba(0, 200, 240, .08);
+      position: absolute;
+      top: .5rem;
+      right: 1rem;
+      line-height: 1;
+    }
+
+    .hb-tag {
+      font-size: .6rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--cyan2);
+      margin-bottom: .3rem;
+    }
+
+    .hb-title {
+      font-family: 'Orbitron', monospace;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: .4rem;
+    }
+
+    .hb-text {
+      font-size: .88rem;
+      color: rgba(0, 200, 240, .7);
+      line-height: 1.65;
+    }
+
+    /* ═══ RULE CARDS ═══ */
+    .rule-grid {
+      display: flex;
+      flex-direction: column;
+      gap: .65rem;
+    }
+
+    .rule-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1rem 1.1rem;
+      display: flex;
+      align-items: flex-start;
+      gap: .9rem;
+      opacity: 0;
+      transform: translateX(-20px);
+      transition: border-color .22s, box-shadow .22s;
+      cursor: default;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .rule-card::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      border-radius: 3px 0 0 3px;
+      transition: opacity .22s;
+    }
+
+    .rule-card:hover {
+      border-color: var(--borderH);
+      box-shadow: 0 6px 24px rgba(0, 0, 0, .3);
+    }
+
+    .rule-card:hover::before {
+      opacity: 1 !important;
+    }
+
+    .rule-ico {
+      width: 40px;
+      height: 40px;
+      border-radius: 11px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+      border: 1px solid;
+    }
+
+    .rule-body {
+      flex: 1;
+    }
+
+    .rule-num {
+      font-size: .55rem;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      font-weight: 700;
+      margin-bottom: .2rem;
+    }
+
+    .rule-title {
+      font-size: .92rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: .3rem;
+    }
+
+    .rule-text {
+      font-size: .8rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* Colors per category */
+    .rc-blue .rule-ico {
+      background: rgba(0, 78, 255, .12);
+      border-color: rgba(0, 78, 255, .3);
+    }
+
+    .rc-blue::before {
+      background: linear-gradient(180deg, var(--blue), var(--cyan2));
+      opacity: 0;
+    }
+
+    .rc-blue .rule-num {
+      color: var(--cyan2);
+    }
+
+    .rc-green .rule-ico {
+      background: rgba(0, 255, 136, .1);
+      border-color: rgba(0, 255, 136, .25);
+    }
+
+    .rc-green::before {
+      background: linear-gradient(180deg, #00aa55, var(--green));
+      opacity: 0;
+    }
+
+    .rc-green .rule-num {
+      color: var(--green);
+    }
+
+    .rc-orange .rule-ico {
+      background: rgba(255, 140, 0, .1);
+      border-color: rgba(255, 140, 0, .25);
+    }
+
+    .rc-orange::before {
+      background: linear-gradient(180deg, #cc6600, var(--orange));
+      opacity: 0;
+    }
+
+    .rc-orange .rule-num {
+      color: var(--orange);
+    }
+
+    .rc-red .rule-ico {
+      background: rgba(255, 56, 96, .1);
+      border-color: rgba(255, 56, 96, .25);
+    }
+
+    .rc-red::before {
+      background: linear-gradient(180deg, #cc0033, var(--red));
+      opacity: 0;
+    }
+
+    .rc-red .rule-num {
+      color: var(--red);
+    }
+
+    .rc-yellow .rule-ico {
+      background: rgba(255, 214, 0, .1);
+      border-color: rgba(255, 214, 0, .25);
+    }
+
+    .rc-yellow::before {
+      background: linear-gradient(180deg, #cc9900, var(--yellow));
+      opacity: 0;
+    }
+
+    .rc-yellow .rule-num {
+      color: var(--yellow);
+    }
+
+    /* ═══ SAFETY CARDS ═══ */
+    .safety-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: .65rem;
+    }
+
+    .safety-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1rem;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all .22s;
+    }
+
+    .safety-card:hover {
+      border-color: var(--borderH);
+      transform: translateY(-2px);
+    }
+
+    .sc-ico {
+      font-size: 1.5rem;
+      margin-bottom: .5rem;
+    }
+
+    .sc-title {
+      font-family: 'Orbitron', monospace;
+      font-size: .7rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: .3rem;
+      letter-spacing: 1px;
+    }
+
+    .sc-text {
+      font-size: .76rem;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    /* ═══ BEGINNER STEPS ═══ */
+    .steps-timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .step-item {
+      display: flex;
+      gap: 1rem;
+      opacity: 0;
+      transform: translateY(18px);
+    }
+
+    .step-left {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .step-circle {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--blue), var(--cyan2));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Orbitron', monospace;
+      font-size: .72rem;
+      font-weight: 700;
+      color: #fff;
+      box-shadow: 0 0 14px rgba(0, 200, 240, .3);
+      flex-shrink: 0;
+    }
+
+    .step-line {
+      width: 2px;
+      flex: 1;
+      background: linear-gradient(180deg, rgba(0, 200, 240, .3), transparent);
+      margin: 4px 0;
+      min-height: 20px;
+    }
+
+    .step-last .step-line {
+      display: none;
+    }
+
+    .step-right {
+      flex: 1;
+      padding-bottom: 1.2rem;
+    }
+
+    .step-week {
+      font-size: .58rem;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--cyan2);
+      margin-bottom: .25rem;
+      font-weight: 700;
+    }
+
+    .step-title {
+      font-size: .92rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: .3rem;
+    }
+
+    .step-text {
+      font-size: .8rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .step-tags {
+      display: flex;
+      gap: .4rem;
+      flex-wrap: wrap;
+      margin-top: .5rem;
+    }
+
+    .stag {
+      font-size: .58rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 2px 8px;
+      border-radius: 6px;
+      background: rgba(0, 200, 240, .08);
+      color: var(--cyan2);
+      border: 1px solid rgba(0, 200, 240, .18);
+    }
+
+    /* ═══ FAQ ACCORDION ═══ */
+    .faq-list {
+      display: flex;
+      flex-direction: column;
+      gap: .55rem;
+    }
+
+    .faq-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      opacity: 0;
+      transition: border-color .22s;
+    }
+
+    .faq-item.open {
+      border-color: rgba(0, 200, 240, .3);
+    }
+
+    .faq-q {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: .9rem 1.1rem;
+      cursor: pointer;
+      gap: .8rem;
+    }
+
+    .faq-q-text {
+      font-size: .88rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.4;
+    }
+
+    .faq-item.open .faq-q-text {
+      color: var(--cyan2);
+    }
+
+    .faq-arrow {
+      width: 22px;
+      height: 22px;
+      border-radius: 6px;
+      background: var(--card2);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .7rem;
+      color: var(--muted);
+      flex-shrink: 0;
+      transition: all .25s;
+    }
+
+    .faq-item.open .faq-arrow {
+      background: rgba(0, 200, 240, .1);
+      border-color: rgba(0, 200, 240, .3);
+      color: var(--cyan2);
+      transform: rotate(180deg);
+    }
+
+    .faq-a {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height .38s cubic-bezier(.22, 1, .36, 1);
+    }
+
+    .faq-item.open .faq-a {
+      max-height: 300px;
+    }
+
+    .faq-a-inner {
+      padding: 0 1.1rem .9rem;
+      font-size: .82rem;
+      color: var(--muted);
+      line-height: 1.7;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ═══ MOTIVATION QUOTE ═══ */
+    .mq-card {
+      background: linear-gradient(135deg, rgba(0, 78, 255, .18), rgba(0, 200, 240, .06));
+      border: 1px solid rgba(0, 200, 240, .2);
+      border-radius: 20px;
+      padding: 1.6rem;
+      text-align: center;
+      opacity: 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .mq-card::before {
+      content: '"';
+      position: absolute;
+      top: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 10rem;
+      font-family: Georgia, serif;
+      color: rgba(0, 200, 240, .05);
+      line-height: 1;
+      pointer-events: none;
+    }
+
+    .mq-text {
+      font-family: 'Orbitron', monospace;
+      font-size: .9rem;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.7;
+      margin-bottom: .7rem;
+      position: relative;
+    }
+
+    .mq-author {
+      font-size: .68rem;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--cyan2);
+    }
+
+    /* BOTTOM NAV */
+    .bnav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: rgba(6, 14, 24, .96);
+      backdrop-filter: blur(20px);
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      padding: .55rem 0 .7rem;
+    }
+
+    .bn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      text-decoration: none;
+      padding: .2rem .8rem;
+    }
+
+    .bn svg {
+      width: 21px;
+      height: 21px;
+      stroke: var(--muted);
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      transition: stroke .2s;
+    }
+
+    .bn span {
+      font-size: .57rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--muted);
+      transition: color .2s;
+    }
+
+    .bn.active svg {
+      stroke: var(--cyan);
+      filter: drop-shadow(0 0 4px rgba(0, 255, 247, .5));
+    }
+
+    .bn.active span {
+      color: var(--cyan);
+    }
+
+    /* SCROLLBAR */
+    ::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--borderH);
+      border-radius: 4px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="bg-grid"></div>
+  <div class="bg-glow"></div>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <a href="dashboard.html" class="nav-logo">
+      <div class="nav-ico">
+        <svg viewBox="0 0 24 24">
+          <line x1="6" y1="5" x2="6" y2="19" />
+          <line x1="18" y1="5" x2="18" y2="19" />
+          <line x1="2" y1="9" x2="6" y2="9" />
+          <line x1="18" y1="9" x2="22" y2="9" />
+          <line x1="2" y1="15" x2="6" y2="15" />
+          <line x1="18" y1="15" x2="22" y2="15" />
+          <line x1="6" y1="12" x2="18" y2="12" />
+        </svg>
+      </div>
+      <span class="nav-brand">IRONPULSE</span>
+    </a>
+    <a href="dashboard.html" class="nav-back">
+      <svg viewBox="0 0 24 24">
+        <polyline points="15,18 9,12 15,6" />
+      </svg>
+      Dashboard
+    </a>
+  </nav>
+
+  <main class="main">
+
+    <!-- HEADER -->
+    <div class="page-head" id="pageHead">
+      <div class="page-tag">Knowledge Base</div>
+      <div class="page-title">Gym Guidelines</div>
+      <div class="page-sub">Rules, safety, beginner guide & FAQs</div>
+    </div>
+
+    <!-- QUICK NAV -->
+    <div class="quick-nav" id="quickNav">
+      <a class="qpill active" href="#rules">📋 Gym Rules</a>
+      <a class="qpill" href="#safety">🛡 Safety</a>
+      <a class="qpill" href="#beginner">🚀 Beginner Guide</a>
+      <a class="qpill" href="#faq">❓ FAQ</a>
+      <a class="qpill" href="#quotes">💬 Motivation</a>
+    </div>
+
+    <!-- ═══ GYM RULES ═══ -->
+    <div class="sec" id="rules">Gym Rules</div>
+
+    <div class="hero-banner" id="heroBanner">
+      <div class="hb-number">01</div>
+      <div class="hb-tag">Golden Rule</div>
+      <div class="hb-title">Respect The Space, Respect Each Other</div>
+      <div class="hb-text">The gym is a shared environment. Every rule exists to protect your safety and the experience
+        of everyone around you. Treat this space like your own home — and treat every member like family.</div>
+    </div>
+
+    <div class="rule-grid" id="ruleGrid"></div>
+
+    <!-- ═══ SAFETY ═══ -->
+    <div class="sec" id="safety">Safety First</div>
+    <div class="safety-grid" id="safetyGrid"></div>
+
+    <!-- ═══ BEGINNER GUIDE ═══ -->
+    <div class="sec" id="beginner">Beginner's Roadmap</div>
+    <div class="steps-timeline" id="stepsTimeline"></div>
+
+    <!-- ═══ FAQ ═══ -->
+    <div class="sec" id="faq">Frequently Asked Questions</div>
+    <div class="faq-list" id="faqList"></div>
+
+    <!-- ═══ MOTIVATION ═══ -->
+    <div class="sec" id="quotes">Motivation</div>
+    <div class="mq-card" id="mqCard">
+      <div class="mq-text" id="mqText">—</div>
+      <div class="mq-author" id="mqAuthor">—</div>
+    </div>
+
+  </main>
+
+  <!-- BOTTOM NAV -->
+  <nav class="bnav">
+    <a href="dashboard.html" class="bn">
+      <svg viewBox="0 0 24 24">
+        <rect x="3" y="3" width="7" height="7" rx="1" />
+        <rect x="14" y="3" width="7" height="7" rx="1" />
+        <rect x="3" y="14" width="7" height="7" rx="1" />
+        <rect x="14" y="14" width="7" height="7" rx="1" />
+      </svg>
+      <span>Home</span>
+    </a>
+    <a href="exercise.html" class="bn">
+      <svg viewBox="0 0 24 24">
+        <path d="M6.5 5.5v13M17.5 5.5v13M2 8.5h4M18 8.5h4M2 15.5h4M18 15.5h4M6.5 12h11" />
+      </svg>
+      <span>Workout</span>
+    </a>
+    <a href="diet.html" class="bn">
+      <svg viewBox="0 0 24 24">
+        <path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2z" />
+        <path d="M12 6v6l4 2" />
+      </svg>
+      <span>Diet</span>
+    </a>
+    <a href="guidelines.html" class="bn active">
+      <svg viewBox="0 0 24 24">
+        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+      </svg>
+      <span>Guide</span>
+    </a>
+  </nav>
+
+  <script>
+    gsap.registerPlugin(ScrollTrigger);
+
+    /* ══════════ GYM RULES ══════════ */
+    var RULES = [
+      {
+        num: 'Rule 01', ico: '🧹', cls: 'rc-blue', title: 'Re-rack Your Weights',
+        text: 'Always return dumbbells, barbells and plates to their designated spots after use. Leaving weights on the floor is a safety hazard and shows disrespect to others.'
+      },
+      {
+        num: 'Rule 02', ico: '💦', cls: 'rc-green', title: 'Wipe Down Equipment',
+        text: 'Use the provided sanitizing spray and towels to clean benches, machines and handles after every single use. This is non-negotiable hygiene.'
+      },
+      {
+        num: 'Rule 03', ico: '⏱', cls: 'rc-blue', title: 'Respect Equipment Time',
+        text: 'During peak hours, limit your time on any machine to 20 minutes. Do not sit on equipment while resting or scrolling your phone.'
+      },
+      {
+        num: 'Rule 04', ico: '📱', cls: 'rc-orange', title: 'Phone Etiquette',
+        text: 'Keep calls short and step away from the floor. Do not film other members without explicit consent. Music should be through earphones only.'
+      },
+      {
+        num: 'Rule 05', ico: '👔', cls: 'rc-green', title: 'Appropriate Attire',
+        text: 'Wear proper workout clothing and closed-toe athletic shoes at all times. Shirts must be worn in all areas. Avoid strong perfumes or colognes.'
+      },
+      {
+        num: 'Rule 06', ico: '🤝', cls: 'rc-blue', title: 'Be Supportive',
+        text: 'Unsolicited advice is unwelcome. If someone asks for help, assist respectfully. Gym culture thrives on encouragement, not judgment.'
+      },
+      {
+        num: 'Rule 07', ico: '🚫', cls: 'rc-red', title: 'No Ego Lifting',
+        text: 'Never lift more than you can handle with proper form. Ego lifting causes injuries and damages equipment. Check your ego at the door.'
+      },
+      {
+        num: 'Rule 08', ico: '🔇', cls: 'rc-orange', title: 'Control Your Volume',
+        text: 'Excessive grunting, dropping weights unnecessarily and loud behaviour disrupt others. Control your movements and your noise.'
+      },
+      {
+        num: 'Rule 09', ico: '🚿', cls: 'rc-green', title: 'Personal Hygiene',
+        text: 'Shower before training if necessary. Bring a clean gym towel every session. Fresh, clean training gear should be worn for every workout.'
+      },
+      {
+        num: 'Rule 10', ico: '🆘', cls: 'rc-red', title: 'Know Emergency Procedures',
+        text: 'Familiarize yourself with fire exits, first aid kits and emergency contacts. In case of injury, alert staff immediately. Never train through serious pain.'
+      }
+    ];
+
+    /* ══════════ SAFETY CARDS ══════════ */
+    var SAFETY = [
+      { ico: '🔥', title: 'Warm Up Always', text: 'Never skip your warm-up. 5–10 minutes of light cardio + dynamic stretching prevents 80% of gym injuries.' },
+      { ico: '💧', title: 'Stay Hydrated', text: 'Drink water before, during and after training. Dehydration reduces performance and increases injury risk significantly.' },
+      { ico: '🧘', title: 'Cool Down', text: 'End every session with 5 minutes of static stretching. This aids recovery and improves long-term flexibility.' },
+      { ico: '😴', title: 'Rest Is Training', text: 'Muscles grow during rest, not during workouts. 7–9 hours of sleep is the most powerful recovery tool available.' },
+      { ico: '⚖️', title: 'Proper Form First', text: 'Always master form with lighter weight before increasing load. Poor form with heavy weight is how serious injuries happen.' },
+      { ico: '👀', title: 'Use a Spotter', text: 'For heavy bench press, squats and overhead lifts, always use a spotter. Never attempt a personal record alone.' },
+      { ico: '🩺', title: 'Listen to Your Body', text: 'Sharp pain, dizziness or nausea are signals to stop immediately. Distinguish between productive discomfort and injury warning signs.' },
+      { ico: '📋', title: 'Track Your Progress', text: 'Log your workouts. Progress tracking keeps you accountable, prevents overtraining and shows you what\'s working.' }
+    ];
+
+    /* ══════════ BEGINNER STEPS ══════════ */
+    var STEPS = [
+      {
+        week: 'Week 1–2', num: '01', title: 'Learn Movement Patterns',
+        text: 'Before touching heavy weights, master the 5 fundamental movements: squat, hinge, push, pull, and carry. Use bodyweight or very light dumbbells.',
+        tags: ['Bodyweight', 'Form Focus', '3x/Week']
+      },
+      {
+        week: 'Week 3–4', num: '02', title: 'Establish Your Routine',
+        text: 'Commit to a consistent schedule — 3 days per week minimum. Show up on your planned days regardless of motivation. Discipline beats motivation every time.',
+        tags: ['3x/Week', 'Consistency', 'Rest Days']
+      },
+      {
+        week: 'Month 2', num: '03', title: 'Progressive Overload Begins',
+        text: 'Start adding small amounts of weight each week. Even 1–2kg per week compounds into massive strength gains over months. Track every session.',
+        tags: ['Add Weight', 'Track Progress', '4x/Week']
+      },
+      {
+        week: 'Month 3', num: '04', title: 'Nutrition Locks In',
+        text: 'Your training is only as good as your nutrition. Hit your daily protein target every single day. Prepare meals in advance to remove decision fatigue.',
+        tags: ['Hit Protein', 'Meal Prep', 'Consistency']
+      },
+      {
+        week: 'Month 4+', num: '05', title: 'Advanced Programming',
+        text: 'After 3 months of consistent training, you can explore split training, periodization and more advanced techniques. By now, this is your lifestyle.',
+        tags: ['Split Training', 'Periodization', 'Lifestyle'],
+        last: true
+      }
+    ];
+
+    /* ══════════ FAQ ══════════ */
+    var FAQS = [
+      {
+        q: 'How many days per week should I train?',
+        a: 'Beginners should train 3 days per week with full rest days between sessions. Intermediate lifters can move to 4 days. Advanced athletes can train 5–6 days, but always include at least 1 full rest day. More is not always better — recovery is where growth happens.'
+      },
+      {
+        q: 'How long should each workout session be?',
+        a: '45–75 minutes is the optimal range for most people. Beyond 90 minutes, cortisol levels rise and performance drops. Quality over quantity — a focused 50-minute session beats a distracted 2-hour one every time.'
+      },
+      {
+        q: 'Should I do cardio and weights on the same day?',
+        a: 'Yes, it\'s fine. If your goal is muscle gain, do weights first then cardio. If your goal is fat loss or endurance, cardio first works too. Keep cardio sessions after weights to avoid pre-fatiguing your muscles for lifting.'
+      },
+      {
+        q: 'What should I eat before a workout?',
+        a: 'Eat a balanced meal 2–3 hours before training: complex carbs + protein + minimal fat. A banana with peanut butter or oats with Greek yogurt 60–90 minutes before also works well. Avoid training completely fasted if your session exceeds 45 minutes.'
+      },
+      {
+        q: 'How soon will I see results?',
+        a: 'Strength improvements begin in 2–3 weeks as your nervous system adapts. Visible muscle changes take 6–8 weeks of consistent training and good nutrition. Significant body composition changes take 3–6 months. Patience and consistency are the only shortcuts.'
+      },
+      {
+        q: 'Is soreness a sign of a good workout?',
+        a: 'DOMS (Delayed Onset Muscle Soreness) in the 24–48 hours after training is normal, especially when starting or changing programs. However, soreness is not an indicator of workout quality. You can have an excellent session with minimal soreness once your body adapts.'
+      },
+      {
+        q: 'Can I train if I\'m sore?',
+        a: 'Light to moderate soreness is fine — training through it with lighter weights can actually speed up recovery. Severe soreness or pain in joints and tendons is a signal to rest. Never train through sharp, shooting or joint pain.'
+      },
+      {
+        q: 'How important is protein really?',
+        a: 'Protein is non-negotiable for muscle growth and recovery. Aim for 1.6–2.2g per kg of body weight daily. Distribute it across 4–5 meals rather than consuming it all at once. Without adequate protein, your training results will be severely limited regardless of how hard you work.'
+      }
+    ];
+
+    /* ══════════ QUOTES ══════════ */
+    var QUOTES = [
+      { t: 'The only bad workout is the one that didn\'t happen.', a: '— Unknown' },
+      { t: 'Strength does not come from the body. It comes from the will of the soul.', a: '— Gandhi' },
+      { t: 'The pain you feel today will be the strength you feel tomorrow.', a: '— Unknown' },
+      { t: 'Don\'t stop when you\'re tired. Stop when you\'re done.', a: '— Unknown' },
+      { t: 'Champions aren\'t made in gyms. Champions are made from something inside them.', a: '— Muhammad Ali' },
+      { t: 'If it doesn\'t challenge you, it doesn\'t change you.', a: '— Fred DeVito' },
+      { t: 'Train like a beast, look like a beauty.', a: '— Unknown' }
+    ];
+
+    /* ══════════ BUILD ══════════ */
+    document.addEventListener('DOMContentLoaded', function () {
+      buildRules();
+      buildSafety();
+      buildSteps();
+      buildFAQ();
+      buildQuote();
+      runAnimations();
+    });
+
+    function buildRules() {
+      var html = '';
+      RULES.forEach(function (r, i) {
+        html +=
+          '<div class="rule-card ' + r.cls + '" id="rc' + i + '">' +
+          '<div class="rule-ico">' + r.ico + '</div>' +
+          '<div class="rule-body">' +
+          '<div class="rule-num">' + r.num + '</div>' +
+          '<div class="rule-title">' + r.title + '</div>' +
+          '<div class="rule-text">' + r.text + '</div>' +
+          '</div></div>';
+      });
+      document.getElementById('ruleGrid').innerHTML = html;
+    }
+
+    function buildSafety() {
+      var html = '';
+      SAFETY.forEach(function (s) {
+        html +=
+          '<div class="safety-card">' +
+          '<div class="sc-ico">' + s.ico + '</div>' +
+          '<div class="sc-title">' + s.title + '</div>' +
+          '<div class="sc-text">' + s.text + '</div>' +
+          '</div>';
+      });
+      document.getElementById('safetyGrid').innerHTML = html;
+    }
+
+    function buildSteps() {
+      var html = '';
+      STEPS.forEach(function (s) {
+        var tags = s.tags.map(function (t) { return '<span class="stag">' + t + '</span>'; }).join('');
+        html +=
+          '<div class="step-item' + (s.last ? ' step-last' : '') + '" >' +
+          '<div class="step-left">' +
+          '<div class="step-circle">' + s.num + '</div>' +
+          '<div class="step-line"></div>' +
+          '</div>' +
+          '<div class="step-right">' +
+          '<div class="step-week">' + s.week + '</div>' +
+          '<div class="step-title">' + s.title + '</div>' +
+          '<div class="step-text">' + s.text + '</div>' +
+          '<div class="step-tags">' + tags + '</div>' +
+          '</div></div>';
+      });
+      document.getElementById('stepsTimeline').innerHTML = html;
+    }
+
+    function buildFAQ() {
+      var html = '';
+      FAQS.forEach(function (f, i) {
+        html +=
+          '<div class="faq-item" id="faq' + i + '">' +
+          '<div class="faq-q" onclick="toggleFAQ(' + i + ')">' +
+          '<div class="faq-q-text">' + f.q + '</div>' +
+          '<div class="faq-arrow">▾</div>' +
+          '</div>' +
+          '<div class="faq-a"><div class="faq-a-inner">' + f.a + '</div></div>' +
+          '</div>';
+      });
+      document.getElementById('faqList').innerHTML = html;
+    }
+
+    function toggleFAQ(i) {
+      var item = document.getElementById('faq' + i);
+      var isOpen = item.classList.contains('open');
+      /* Close all */
+      document.querySelectorAll('.faq-item').forEach(function (el) { el.classList.remove('open'); });
+      /* Open clicked if was closed */
+      if (!isOpen) item.classList.add('open');
+    }
+
+    function buildQuote() {
+      var day = new Date().getDay();
+      var q = QUOTES[day % QUOTES.length];
+      document.getElementById('mqText').textContent = q.t;
+      document.getElementById('mqAuthor').textContent = q.a;
+    }
+
+    /* ══════════ GSAP ══════════ */
+    function runAnimations() {
+      /* Entry */
+      var tl = gsap.timeline();
+      tl.to('#pageHead', { opacity: 1, y: 0, duration: .6, ease: 'power3.out' })
+        .to('#quickNav', { opacity: 1, duration: .45, ease: 'power2.out' }, '-=.3')
+        .to('#heroBanner', { opacity: 1, duration: .5, ease: 'power2.out' }, '-=.2');
+
+      /* Rule cards — staggered slide-in from left */
+      gsap.utils.toArray('.rule-card').forEach(function (el, i) {
+        gsap.to(el, {
+          opacity: 1, x: 0, duration: .5, delay: i * .06, ease: 'power3.out',
+          scrollTrigger: { trigger: el, start: 'top 92%', toggleActions: 'play none none none' }
+        });
+      });
+
+      /* Safety cards */
+      gsap.utils.toArray('.safety-card').forEach(function (el, i) {
+        gsap.to(el, {
+          opacity: 1, y: 0, duration: .45, delay: i * .07, ease: 'power3.out',
+          scrollTrigger: { trigger: el, start: 'top 92%', toggleActions: 'play none none none' }
+        });
+      });
+
+      /* Timeline steps */
+      gsap.utils.toArray('.step-item').forEach(function (el, i) {
+        gsap.to(el, {
+          opacity: 1, y: 0, duration: .5, delay: i * .08, ease: 'power3.out',
+          scrollTrigger: { trigger: el, start: 'top 90%', toggleActions: 'play none none none' }
+        });
+      });
+
+      /* FAQ items */
+      gsap.utils.toArray('.faq-item').forEach(function (el, i) {
+        gsap.to(el, {
+          opacity: 1, duration: .4, delay: i * .06, ease: 'power2.out',
+          scrollTrigger: { trigger: el, start: 'top 92%', toggleActions: 'play none none none' }
+        });
+      });
+
+      /* Quote card */
+      gsap.to('#mqCard', {
+        opacity: 1, duration: .6, ease: 'power2.out',
+        scrollTrigger: { trigger: '#mqCard', start: 'top 88%' }
+      });
+    }
+  </script>
+</body>
+
+</html>
